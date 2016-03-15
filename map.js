@@ -1,18 +1,28 @@
 
 var map;
 var infowindow;
+var currentPos
+currentPos = {lat: 56.605099, lng: 13.003036};
 
 function initMap() {
-  var malmo = {lat: 55.605099, lng: 13.003036};
+    
+    
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: currentPos,
+        zoom: 15
+    });
 
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: malmo,
-    zoom: 15
-  });
-
-  infowindow = new google.maps.InfoWindow();
-  var service = new google.maps.places.PlacesService(map);
+    infowindow = new google.maps.InfoWindow();
+    //var infoWindow = new google.maps.InfoWindow({map: map});
+    var service = new google.maps.places.PlacesService(map);
   
+    
+    if (navigator.geolocation) {    
+        console.log("geolocation supported");
+        navigator.geolocation.getCurrentPosition(setPosition);
+    } else {
+        console.log("geolocation not supported");
+    }
     
     
     map.addListener('click', function(event) {
@@ -20,10 +30,10 @@ function initMap() {
         
         var lng = event.latLng.lng();
         
-        var current = {lat: lat, lng: lng};
-        console.log(current);
+        var pointed = {lat: lat, lng: lng};
+        console.log(pointed);
         service.nearbySearch({
-            location: current,
+            location: pointed,
             radius: 500,
             type: ['bus_station']
           }, callback);
@@ -34,9 +44,11 @@ function initMap() {
 function callback(results, status) {
   console.log("kek");
     if (status === google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
+    createMarker(results[0]);
+    /*
+    for (var i = 0; i < 1; i++) {
       createMarker(results[i]);
-    }
+    }*/
   }
 }
 
@@ -48,7 +60,22 @@ function createMarker(place) {
   });
 
   google.maps.event.addListener(marker, 'click', function() {
-    infowindow.setContent(place.name);
+    infowindow.setContent(place.name+" lel");
     infowindow.open(map, this);
   });
+}
+
+//navigator.geolocation.getCurrentPosition(showPosition);
+
+function showPosition(position) {
+    console.log("Latitude: " + position.coords.latitude + 
+    "Longitude: " + position.coords.longitude); 
+}
+function setPosition(position) {
+    currentPos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+    
+    map.setCenter(currentPos);
 }
