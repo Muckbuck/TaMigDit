@@ -16,7 +16,7 @@ function initMap() {
         zoom: 8
     });
     directionsDisplay.setMap(map);
-
+    
     infowindow = new google.maps.InfoWindow();
 
     var service = new google.maps.places.PlacesService(map);
@@ -90,9 +90,12 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, 
         travelMode: google.maps.TravelMode.TRANSIT
     }, function (response, status) {
         if (status === google.maps.DirectionsStatus.OK) {
+            document.getElementById('errorspace').innerHTML = "";
             directionsDisplay.setDirections(response);
         } else {
-            document.getElementByID('errorspace').innerHTML = 'Directions request failed due to ' + status; 
+            console.log("hej");
+            
+            document.getElementById('errorspace').innerHTML = 'Directions request failed due to ' + status; 
         }
     });
 }
