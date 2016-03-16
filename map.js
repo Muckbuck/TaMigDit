@@ -1,9 +1,11 @@
-
 var map;
 var infowindow;
 var currentPos
-/*Default current position*/
-currentPos = {lat: 56.605099, lng: 13.003036};
+    /*Default current position*/
+currentPos = {
+    lat: 56.605099,
+    lng: 13.003036
+};
 
 function initMap() {
     var directionsService = new google.maps.DirectionsService;
@@ -11,86 +13,86 @@ function initMap() {
     
     map = new google.maps.Map(document.getElementById('map'), {
         center: currentPos,
-        zoom: 15
+        zoom: 8
     });
     directionsDisplay.setMap(map);
-    
+
     infowindow = new google.maps.InfoWindow();
-    //var infoWindow = new google.maps.InfoWindow({map: map});
+
     var service = new google.maps.places.PlacesService(map);
-  
-    
-    if (navigator.geolocation) {    
-        console.log("geolocation supported");
+
+    /* Sätt nuvarande position till */
+    if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(setPosition);
     } else {
-        console.log("geolocation not supported");
+        console.log("Geolocation not supported");
     }
     
-    
-    /*Vid klickning på kartan*/
-    map.addListener('click', function(event) {
-        var lat = event.latLng.lat();
-        var lng = event.latLng.lng();
+    /* Vid manuell input */
+    document.getElementById("go-button").addEventListener("click", function(){
+        var destination = document.getElementById("destination-field").value;
+        console.log(destination);
+        calculateAndDisplayRoute(directionsService, directionsDisplay, 
+                                 currentPos, destination);
         
-        var pointed = {lat: lat, lng: lng};
-        console.log(pointed);
-        calculateAndDisplayRoute(directionsService, directionsDisplay, currentPos, pointed);
-        /*
-        service.nearbySearch({
-            location: pointed,
-            radius: 500,
-            type: ['bus_station']
-          }, callback);
-        */
+    });
+    
+    
+    /* Vid klickning på kartan */
+    map.addListener('click', function (event) {
+        var destination = {
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng()
+        };
+        console.log(destination);
+        calculateAndDisplayRoute(directionsService, directionsDisplay, 
+                                 currentPos, destination);
+        
     });
 }
 
-function callback(results, status) {
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
-    createMarker(results[0]);
-        
-  }
+function createSimpleMarker(place) {
+    var marker = new google.maps.Marker({
+        position: place,
+        map: map,
+        title: 'testtitel'
+    });
+    google.maps.event.addListener(marker, 'click', function () {
+        infowindow.setContent("testmeddelande");
+        infowindow.open(map, this);
+    });
 }
 
-function createMarker(place) {
-  var placeLoc = place.geometry.location;
-  var marker = new google.maps.Marker({
-    map: map,
-    position: place.geometry.location
-  });
-
-  google.maps.event.addListener(marker, 'click', function() {
-    infowindow.setContent(place.name+" lel");
-    infowindow.open(map, this);
-  });
-}
-
-//navigator.geolocation.getCurrentPosition(showPosition);
-
-function showPosition(position) {
-    console.log("Latitude: " + position.coords.latitude + 
-    "Longitude: " + position.coords.longitude); 
-}
 function setPosition(position) {
+    /* Ändrar currentPos till nuvarande geolocation position
+     * och centrerar kartan på positionen*/
     currentPos = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
-      };
-    
+    };
+
     map.setCenter(currentPos);
+    map.setZoom(15);
+    createSimpleMarker(currentPos);
+    
+    var infowindow3 = new google.maps.InfoWindow({
+        content: "lel"
+      });
+    infowindow3.open(map, currentPos);
 }
 
 function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, destination) {
-  directionsService.route({
-    origin: origin,
-    destination: destination,
-    travelMode: google.maps.TravelMode.TRANSIT
-  }, function(response, status) {
-    if (status === google.maps.DirectionsStatus.OK) {
-      directionsDisplay.setDirections(response);
-    } else {
-      window.alert('Directions request failed due to ' + status);
-    }
-  });
+    /* Tar emot två positioner, origin och destination och räknar ut bästa
+     * resväg med kollektivtrafik och visar upp resvägen på karta*/
+    directionsService.route({
+        origin: origin,
+        destination: destination,
+        travelMode: google.maps.TravelMode.TRANSIT
+    }, function (response, status) {
+        if (status === google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+        } else {
+            document.getElementByID('errorspace').innerHTML = 'Directions request failed due to ' + status; 
+        }
+    });
 }
