@@ -2,16 +2,19 @@
 var map;
 var infowindow;
 var currentPos
+/*Default current position*/
 currentPos = {lat: 56.605099, lng: 13.003036};
 
 function initMap() {
-    
+    var directionsService = new google.maps.DirectionsService;
+    var directionsDisplay = new google.maps.DirectionsRenderer;
     
     map = new google.maps.Map(document.getElementById('map'), {
         center: currentPos,
         zoom: 15
     });
-
+    directionsDisplay.setMap(map);
+    
     infowindow = new google.maps.InfoWindow();
     //var infoWindow = new google.maps.InfoWindow({map: map});
     var service = new google.maps.places.PlacesService(map);
@@ -25,30 +28,28 @@ function initMap() {
     }
     
     
+    /*Vid klickning på kartan*/
     map.addListener('click', function(event) {
         var lat = event.latLng.lat();
-        
         var lng = event.latLng.lng();
         
         var pointed = {lat: lat, lng: lng};
         console.log(pointed);
+        calculateAndDisplayRoute(directionsService, directionsDisplay, currentPos, pointed);
+        /*
         service.nearbySearch({
             location: pointed,
             radius: 500,
             type: ['bus_station']
           }, callback);
-        
+        */
     });
 }
 
 function callback(results, status) {
-  console.log("kek");
     if (status === google.maps.places.PlacesServiceStatus.OK) {
     createMarker(results[0]);
-    /*
-    for (var i = 0; i < 1; i++) {
-      createMarker(results[i]);
-    }*/
+        
   }
 }
 
@@ -78,4 +79,18 @@ function setPosition(position) {
       };
     
     map.setCenter(currentPos);
+}
+
+function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, destination) {
+  directionsService.route({
+    origin: origin,
+    destination: destination,
+    travelMode: google.maps.TravelMode.TRANSIT
+  }, function(response, status) {
+    if (status === google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+    } else {
+      window.alert('Directions request failed due to ' + status);
+    }
+  });
 }
