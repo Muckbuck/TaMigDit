@@ -32,7 +32,8 @@
 
 <body>
     <div id="floating-panel">
-        <input type="text" name="destination" placeholder="Destination" id="destination-field">
+        <input type="text" name="origin" placeholder="Från" id="origin-field"><br>
+        <input type="text" name="destination" placeholder="Till" id="destination-field">
         
         <form>
             <input type="radio" name="transitTime" id="departure" value="departure" checked> Avgång
@@ -43,6 +44,7 @@
         <span id="errorspace"></span>
     </div>
     <div id="map"></div>
+    <div id="debugArea"></div>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNePwQxex-MkHNGg6MIVDDwJDEM-zvsmk
         &libraries=places&callback=initMap">
     </script>

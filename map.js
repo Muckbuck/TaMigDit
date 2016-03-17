@@ -125,8 +125,6 @@ function setPosition(position) {
 function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, destination, departure, arrival) {
     /* Tar emot två positioner, origin och destination och räknar ut bästa
      * resväg med kollektivtrafik och visar upp resvägen på karta*/
-    /*arrival = new Date(arrival);
-    departure = new Date(departure);*/
     console.log(departure);
     directionsService.route({
         origin: origin,
@@ -137,6 +135,11 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, 
             arrivalTime: arrival
           },
     }, function (response, status) {
+        console.log(response);
+        //console.log(response.routes[0].legs[0].end_address);
+        var endAdress = response.routes[0].legs[0].end_address;
+        console.log(endAdress);
+        document.getElementById("destination-field").value = response.routes[0].legs[0].end_address;
         if (status === google.maps.DirectionsStatus.OK) {
             document.getElementById('errorspace').innerHTML = "";
             directionsDisplay.setDirections(response);
