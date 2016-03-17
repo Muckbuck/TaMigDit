@@ -12,13 +12,20 @@
             console.log(json);
             var leg = json.Trip[0].LegList.Leg;
             var legLength = leg.length;
-            
+
             for (i = 0; i < legLength; i++) {
-                console.log(json.Trip[0].LegList.Leg[i].Destination.time);
+
+
+
+                if (leg[i].hasOwnProperty('Product')) {
+                    console.log(json.Trip[0].LegList.Leg[i].Destination.time, json.Trip[0].LegList.Leg[i].Product.catOutL, json.Trip[0].LegList.Leg[i].Product.num, ' to ', json.Trip[0].LegList.Leg[i].Destination.name);
+                } else {
+                    console.log(json.Trip[0].LegList.Leg[i].Destination.time, json.Trip[0].LegList.Leg[i].type, ' to ', json.Trip[0].LegList.Leg[i].Destination.name);
+                }
             }
-        
+
             console.log(legLength)
-            console.log(json.Trip[0].LegList.Leg[0].Destination.time);
+
         },
         error: function (e) {
             console.log(e.message);
