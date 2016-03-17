@@ -20,18 +20,6 @@
   </header>
     <section class="menu-section">
       <h3 class="menu-section-title"></h3>
-        <p>
-        Hej här kommer sökfält
-        </p>
-    </section>
-</nav>
-
-<main id="panel" class="panel slideout-panel">
-  <div class="panel-main">
-      
-    <button class="toggle-button">☰</button>
-      
-    <div id="floating-panel">
         <input type="text" name="origin" placeholder="Från" id="origin-field"><br>
         <input type="text" name="destination" placeholder="Till" id="destination-field">
         <form>
@@ -39,16 +27,19 @@
             <input type="radio" name="transitTime" id="arrival" value="arrival"> Ankomst
         </form>
         <input id="timeInput" type="time">
-        <button type="button" id="go-button">Go</button>
+        <button type="button" id="go-button">Sök</button>
         <span id="errorspace"></span>
-      
-      </div>
-    </div>
-    </main>
-    <div class="panel-map">
+    </section>
+</nav>
+
+<main id="panel" class="panel">      
+        <button class="toggle-button">☰</button>
+        <input type="text" name="destination" placeholder="Till" id="destination-field">
+        <button type="button" id="go-button">Sök</button>
+</main>
         <div id="map"></div>
-        <div id="debugArea"></div>
-    </div>
+        <div id="debugArea"></div> 
+
     <!--
     <footer class="panel-footer"></footer>
     -->

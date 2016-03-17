@@ -156,31 +156,3 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, 
         }
     });
 }
-
-
-/*****Geocoder**********/
-var geocoder;
-
-function initialize() {
-  geocoder = new google.maps.Geocoder();
-}
-
-function codeLatLng(lat, lng) {
-  var latlng = new google.maps.LatLng(lat, lng);
-  geocoder.geocode({
-    'latLng': latlng
-  }, function (results, status) {
-    if (status === google.maps.GeocoderStatus.OK) {
-      if (results[1]) {
-        console.log(results[1]);
-      } else {
-        alert('No results found');
-      }
-    } else {
-      alert('Geocoder failed due to: ' + status);
-    }
-  });
-}
-
-google.maps.event.addDomListener(window, 'load', initialize);
-/*******************************/

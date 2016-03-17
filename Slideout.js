@@ -1,4 +1,6 @@
 /*Menu functionality*/
+var searchfield = document.getElementById("searchfield");
+
 var slideout = new Slideout({
     'panel': document.getElementById('panel'),
     'menu': document.getElementById('menu'),
@@ -10,4 +12,5 @@ var slideout = new Slideout({
 // Toggle button
     document.querySelector('.toggle-button').addEventListener('click', function() {
     slideout.toggle();
+
 });
