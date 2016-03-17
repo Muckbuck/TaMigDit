@@ -1,8 +1,8 @@
+/*Map functionality*/
 var map;
 var infowindow;
-var currentPos
+var currentPos;
 
-/*Default nuvarande position*/
 currentPos = {
     lat: 56.605099,
     lng: 13.003036

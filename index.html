@@ -1,40 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    <head>
+    <title>TaMigDit</title>
+    <meta charset="utf-8">
+    <meta http-equiv="cleartype" content="on">
+    <meta name="MobileOptimized" content="320">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">    
 
-<head>
-    <style type="text/css">
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        
-        #map {
-            height: 100%;
-        }
-        #floating-panel {
-            position: absolute;
-            top: 10px;
-            left: 25%;
-            z-index: 5;
-            background-color: #fff;
-            padding: 5px;
-            border: 1px solid #999;
-            text-align: center;
-            font-family: 'Roboto','sans-serif';
-            line-height: 30px;
-            padding-left: 10px;
-            border-radius: 2px;
-        }
-    </style>
-</head>
+    <link rel="stylesheet" type="text/css" href="main.css">    
 
+    </head>
+    
 <body>
+<nav id="menu" class="menu slideout-menu">
+  <header class="menu-header">
+      <h2>TaMigDit</h2>
+  </header>
+    <section class="menu-section">
+      <h3 class="menu-section-title"></h3>
+        <p>
+        Hej här kommer sökfält
+        </p>
+    </section>
+</nav>
+
+<main id="panel" class="panel slideout-panel">
+  <div class="panel-main">
+      
+    <button class="toggle-button">☰</button>
+      
     <div id="floating-panel">
         <input type="text" name="origin" placeholder="Från" id="origin-field"><br>
         <input type="text" name="destination" placeholder="Till" id="destination-field">
-        
         <form>
             <input type="radio" name="transitTime" id="departure" value="departure" checked> Avgång
             <input type="radio" name="transitTime" id="arrival" value="arrival"> Ankomst
@@ -43,13 +42,25 @@
         <button type="button" id="go-button">Go</button>
         <span id="errorspace"></span>
     </div>
-    <div id="map"></div>
-    <div id="debugArea"></div>
+        
+    <div class="panel-map">
+        <div id="map"></div>
+        <div id="debugArea"></div>
+    </div>      
+    </div>
+
+    <!--
+    <footer class="panel-footer"></footer>
+    -->
+</main>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNePwQxex-MkHNGg6MIVDDwJDEM-zvsmk
         &libraries=places&callback=initMap">
     </script>
     <script src="map.js">
     </script>
+    <script src="node_modules/slideout/dist/slideout.min.js"></script>
+    <script src="Slideout.js"></script>
+    
 </body>
 
 </html>

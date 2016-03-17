@@ -1,0 +1,22 @@
+{
+  "name": "tamigdit",
+  "version": "1.0.0",
+  "description": "Application for getting transit directions",
+  "main": "Slideout.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Muckbuck/TaMigDit.git"
+  },
+  "keywords": [
+    "Directions"
+  ],
+  "author": "HaAnEr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Muckbuck/TaMigDit/issues"
+  },
+  "homepage": "https://github.com/Muckbuck/TaMigDit#readme"
+}
