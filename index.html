@@ -33,6 +33,12 @@
 <body>
     <div id="floating-panel">
         <input type="text" name="destination" placeholder="Destination" id="destination-field">
+        
+        <form>
+            <input type="radio" name="transitTime" id="departure" value="departure" checked> Avgång
+            <input type="radio" name="transitTime" id="arrival" value="arrival"> Ankomst
+        </form>
+        <input id="timeInput" type="time">
         <button type="button" id="go-button">Go</button>
         <span id="errorspace"></span>
     </div>

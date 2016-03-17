@@ -1,11 +1,24 @@
 var map;
 var infowindow;
 var currentPos
-    /*Default current position*/
+
+/*Default nuvarande position*/
 currentPos = {
     lat: 56.605099,
     lng: 13.003036
 };
+/* Ändra tidsväljaren till nuvarande tid */
+var d = new Date();
+var currentHour = d.getHours();
+if (currentHour < 10) {
+    currentHour = "0"+currentHour;
+}
+var currentMinute = d.getMinutes();
+if (currentMinute < 10) {
+    currentMinute = "0"+currentMinute;
+}
+
+document.getElementById("timeInput").value = currentHour+":"+currentMinute;
 
 function initMap() {
     var directionsService = new google.maps.DirectionsService;
@@ -32,21 +45,39 @@ function initMap() {
     document.getElementById("go-button").addEventListener("click", function(){
         var destination = document.getElementById("destination-field").value;
         console.log(destination);
+        var departure = new Date(2016, 03, 17, 13, 00, 00, 00);
+        var arrival = new Date(0);
         calculateAndDisplayRoute(directionsService, directionsDisplay, 
-                                 currentPos, destination);
+                                 currentPos, destination,
+                                 departure, arrival);
         
     });
     
     
     /* Vid klickning på kartan */
     map.addListener('click', function (event) {
+        if (document.getElementById("departure").checked == true) {
+            var departure = new Date(d.getFullYear(),d.getMonth(),d.getDate(),
+                                     document.getElementById("timeInput").value.substring(0,2),
+                                     document.getElementById("timeInput").value.substring(3,5),
+                                     00,00);
+            var arrival = new Date(0);
+        } else {
+            var arrival = new Date(d.getFullYear(),d.getMonth(),d.getDate(),
+                                     document.getElementById("timeInput").value.substring(0,2),
+                                     document.getElementById("timeInput").value.substring(3,5),
+                                     00,00);
+            var departure = new Date(0);
+        }
+        
         var destination = {
             lat: event.latLng.lat(),
             lng: event.latLng.lng()
         };
         console.log(destination);
         calculateAndDisplayRoute(directionsService, directionsDisplay, 
-                                 currentPos, destination);
+                                 currentPos, destination,
+                                 departure, arrival);
         
     });
 }
@@ -81,19 +112,26 @@ function setPosition(position) {
     infowindow3.open(map, currentPos);
 }
 
-function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, destination) {
+function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, destination, departure, arrival) {
     /* Tar emot två positioner, origin och destination och räknar ut bästa
      * resväg med kollektivtrafik och visar upp resvägen på karta*/
+    /*arrival = new Date(arrival);
+    departure = new Date(departure);*/
+    console.log(departure);
     directionsService.route({
         origin: origin,
         destination: destination,
-        travelMode: google.maps.TravelMode.TRANSIT
+        travelMode: google.maps.TravelMode.TRANSIT,
+        transitOptions: {
+            departureTime: departure,
+            arrivalTime: arrival
+          },
     }, function (response, status) {
         if (status === google.maps.DirectionsStatus.OK) {
             document.getElementById('errorspace').innerHTML = "";
             directionsDisplay.setDirections(response);
         } else {
-            console.log("hej");
+            console.log("error");
             
             document.getElementById('errorspace').innerHTML = 'Directions request failed due to ' + status; 
         }
