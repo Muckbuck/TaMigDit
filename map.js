@@ -44,9 +44,19 @@ function initMap() {
     /* Vid manuell input */
     document.getElementById("go-button").addEventListener("click", function(){
         var destination = document.getElementById("destination-field").value;
-        console.log(destination);
-        var departure = new Date(2016, 03, 17, 13, 00, 00, 00);
-        var arrival = new Date(0);
+        if (document.getElementById("departure").checked == true) {
+            var departure = new Date(d.getFullYear(),d.getMonth(),d.getDate(),
+                                     document.getElementById("timeInput").value.substring(0,2),
+                                     document.getElementById("timeInput").value.substring(3,5),
+                                     00,00);
+            var arrival = new Date(0);
+        } else {
+            var arrival = new Date(d.getFullYear(),d.getMonth(),d.getDate(),
+                                     document.getElementById("timeInput").value.substring(0,2),
+                                     document.getElementById("timeInput").value.substring(3,5),
+                                     00,00);
+            var departure = new Date(0);
+        }
         calculateAndDisplayRoute(directionsService, directionsDisplay, 
                                  currentPos, destination,
                                  departure, arrival);
