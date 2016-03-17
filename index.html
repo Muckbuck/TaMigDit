@@ -1,35 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+
+<head>
     <title>TaMigDit</title>
     <meta charset="utf-8">
     <meta http-equiv="cleartype" content="on">
     <meta name="MobileOptimized" content="320">
     <meta name="HandheldFriendly" content="True">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.2, user-scalable=no">
 
-    <link rel="stylesheet" type="text/css" href="main.css">    
+    <link rel="stylesheet" type="text/css" href="main.css">
     <link rel="stylesheet" href="node_modules/sidr/dist/stylesheets/jquery.sidr.light.min.css">
-    </head>
-    <body>
-        
-<a id="simple-menu" href="#sidr">☰</a>
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
 
-<div id="sidr">
+</head>
 
-        <input type="text" name="origin" placeholder="Från" id="origin-field" value="Nuvarande position"><br>
+<body>
+
+    <!--
+        <div id="simple-menu">
+    
+<a href="#sidr" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+  
+<div id="search-field">        
+<input type="text" name="destination" placeholder="Till" id="destination-field">
+<button type="button" id="go-button">Sök</button>
+</div>
+</div>
+-->
+
+
+    <div id="menu-search">
+        <div class="input-group">
+            <div class="input-group-btn">
+                <a href="#sidr" id="simple-menu-button" class="btn btn-default" role="button"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a> </div>
+            <input type="text" name="destination" class="form-control" aria-label="Till" id="destination-field">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default" id="go-button">Sök</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidr">
+
+        <input type="text" name="origin" placeholder="Från" id="origin-field" value="Nuvarande position">
+        <br>
         <input type="text" name="destination" placeholder="Till" id="destination-field">
         <form>
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-primary active">
+                    <input type="radio" name="transitTime" id="departure" value="departure" class="btn btn-default" checked>Avgång</label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="transitTime" id="arrival" value="arrival" class="btn btn-default">Ankomst</label>
+            </div>
+        </form>
+            <!--
             <input type="radio" name="transitTime" id="departure" value="departure" checked> Avgång
             <input type="radio" name="transitTime" id="arrival" value="arrival"> Ankomst
-        </form>
+            -->
+
         <input id="timeInput" type="time">
         <button type="button" id="go-button">Sök</button>
         <div id="errorspace"></div>
-    
-</div>
-        <div id="map"></div>
+
+    </div>
+    <div id="map"></div>
 
     <!--
     <footer class="panel-footer"></footer>
@@ -39,18 +75,12 @@
     </script>
     <script src="map.js">
     </script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/jquery/2.2.0/jquery.min.js"></script>
     <script src="node_modules/sidr/dist/jquery.sidr.min.js"></script>
     <script src="menu.js"></script>
-    
-<script>
-$(document).ready(function() {
-  $('#simple-menu').sidr();
-});
-</script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    
 </body>
 
 </html>

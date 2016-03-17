@@ -56,6 +56,9 @@ html,body {
        
 #map {
     height: 100%;
+    width: 100%;
+    position: fixed!important;
+    left:0;
     }
 /*
 */
@@ -75,3 +78,9 @@ html,body {
     position: absolute;
     z-index: 1;
 }
+/*
+#search-field {
+    position: absolute;
+    z-index: 1;
+    margin-left:2%;
+}*/
