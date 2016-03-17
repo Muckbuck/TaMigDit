@@ -7,6 +7,8 @@ currentPos = {
     lat: 56.605099,
     lng: 13.003036
 };
+/*****************************/
+
 /* Ändra tidsväljaren till nuvarande tid */
 var d = new Date();
 var currentHour = d.getHours();
@@ -17,13 +19,18 @@ var currentMinute = d.getMinutes();
 if (currentMinute < 10) {
     currentMinute = "0"+currentMinute;
 }
-
 document.getElementById("timeInput").value = currentHour+":"+currentMinute;
+/******************************************/
 
-function clearContents(element) {
-  element.value = '';
-}
-document.getElementById("origin").addEventListener("click", displayDate);
+/* Resnar originfältet första gången den markeras */
+var defaultOrigin = true;
+document.getElementById("origin-field").addEventListener('focus',function(e){
+    if (defaultOrigin) {
+        this.value = '';
+        defaultOrigin = false;
+    }
+}, true);
+/**************************************************/
 
 function initMap() {
     var directionsService = new google.maps.DirectionsService;
@@ -50,14 +57,19 @@ function initMap() {
         console.log("Geolocation not supported");
     }
     
+    
+    function getInputDeparture() {
+        return new Date(d.getFullYear(),d.getMonth()+1,d.getDate(),
+                                     document.getElementById("timeInput").value.substring(0,2),
+                                     document.getElementById("timeInput").value.substring(3,5),
+                                     00,00);
+    }
+    
     /* Vid manuell input */
     document.getElementById("go-button").addEventListener("click", function(){
         var destination = document.getElementById("destination-field").value;
         if (document.getElementById("departure").checked == true) {
-            var departure = new Date(d.getFullYear(),d.getMonth()+1,d.getDate(),
-                                     document.getElementById("timeInput").value.substring(0,2),
-                                     document.getElementById("timeInput").value.substring(3,5),
-                                     00,00);
+            var departure = getInputDeparture();
             var arrival = new Date(0);
         } else {
             var arrival = new Date(d.getFullYear(),d.getMonth()+1,d.getDate(),
