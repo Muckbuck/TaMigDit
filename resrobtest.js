@@ -11,19 +11,22 @@
         success: function (json) {
             console.log(json);
             var leg = json.Trip[0].LegList.Leg;
+            var trip = json.Trip;
+            var tripLength = trip.length;
             var legLength = leg.length;
+            for (y = 0; y < tripLength; y++) {
+                for (i = 0; i < legLength; i++) {
 
-            for (i = 0; i < legLength; i++) {
 
 
-
-                if (leg[i].hasOwnProperty('Product')) {
-                    console.log(json.Trip[0].LegList.Leg[i].Destination.time, json.Trip[0].LegList.Leg[i].Product.catOutL, json.Trip[0].LegList.Leg[i].Product.num, ' to ', json.Trip[0].LegList.Leg[i].Destination.name);
-                } else {
-                    console.log(json.Trip[0].LegList.Leg[i].Destination.time, json.Trip[0].LegList.Leg[i].type, ' to ', json.Trip[0].LegList.Leg[i].Destination.name);
+                    if (leg[i].hasOwnProperty('Product')) {
+                        console.log(json.Trip[y].LegList.Leg[i].Destination.time, json.Trip[y].LegList.Leg[i].Product.catOutL, json.Trip[y].LegList.Leg[i].Product.num, ' to ', json.Trip[0].LegList.Leg[i].Destination.name);
+                        
+                    } else {
+                        console.log(json.Trip[y].LegList.Leg[i].Destination.time, json.Trip[y].LegList.Leg[i].type, ' to ', json.Trip[y].LegList.Leg[i].Destination.name);
+                    }
                 }
             }
-
             console.log(legLength)
 
         },
