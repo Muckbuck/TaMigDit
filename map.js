@@ -1,6 +1,6 @@
 var map;
 var infowindow;
-var currentPos
+var currentPos;
 
 /*Default nuvarande position*/
 currentPos = {
@@ -34,7 +34,7 @@ function initMap() {
 
     var service = new google.maps.places.PlacesService(map);
 
-    /* Sätt nuvarande position till */
+    /* Sätt nuvarande position till användarens geolocation */
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(setPosition);
     } else {
@@ -62,7 +62,7 @@ function initMap() {
                                  departure, arrival);
         
     });
-    
+    /*************************/
     
     /* Vid klickning på kartan */
     map.addListener('click', function (event) {
@@ -90,9 +90,11 @@ function initMap() {
                                  departure, arrival);
         
     });
+    /***********************/
 }
 
 function createSimpleMarker(place) {
+    /* Skapar en markör på position place */
     var marker = new google.maps.Marker({
         position: place,
         map: map,
@@ -117,9 +119,11 @@ function setPosition(position) {
     createSimpleMarker(currentPos);
     
     var infowindow3 = new google.maps.InfoWindow({
-        content: "lel"
+        content: "Din position"
       });
     infowindow3.open(map, currentPos);
+    
+    console.log(codeLatLng(currentPos.lat, currentPos.lng));
 }
 
 function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, destination, departure, arrival) {
@@ -136,17 +140,47 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, 
           },
     }, function (response, status) {
         console.log(response);
-        //console.log(response.routes[0].legs[0].end_address);
-        var endAdress = response.routes[0].legs[0].end_address;
-        console.log(endAdress);
-        document.getElementById("destination-field").value = response.routes[0].legs[0].end_address;
         if (status === google.maps.DirectionsStatus.OK) {
             document.getElementById('errorspace').innerHTML = "";
             directionsDisplay.setDirections(response);
+            document.getElementById("destination-field").value = 
+                response.routes[0].legs[0].end_address;
         } else {
             console.log("error");
-            
-            document.getElementById('errorspace').innerHTML = 'Directions request failed due to ' + status; 
+            if (status == "ZERO_RESULTS") {
+                console.log("hej");
+                document.getElementById('errorspace').innerHTML = "Kunde inte hitta någon väg till vald destination";
+            } else {
+                document.getElementById('errorspace').innerHTML = 'Directions request failed due to ' + status; 
+            }
         }
     });
 }
+
+
+/*****Geocoder**********/
+var geocoder;
+
+function initialize() {
+  geocoder = new google.maps.Geocoder();
+}
+
+function codeLatLng(lat, lng) {
+  var latlng = new google.maps.LatLng(lat, lng);
+  geocoder.geocode({
+    'latLng': latlng
+  }, function (results, status) {
+    if (status === google.maps.GeocoderStatus.OK) {
+      if (results[1]) {
+        console.log(results[1]);
+      } else {
+        alert('No results found');
+      }
+    } else {
+      alert('Geocoder failed due to: ' + status);
+    }
+  });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+/*******************************/
