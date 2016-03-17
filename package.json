@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/Muckbuck/TaMigDit/issues"
   },
-  "homepage": "https://github.com/Muckbuck/TaMigDit#readme"
+  "homepage": "https://github.com/Muckbuck/TaMigDit#readme",
+  "dependencies": {
+    "sidr": "^2.2.1"
+  }
 }

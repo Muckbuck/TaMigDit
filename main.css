@@ -62,32 +62,16 @@ html,body {
 /*Slider
 */
 
-.slideout-menu {
-  background-color:azure;
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 1;
-  width: 256px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  display: none;
+#mobile-header {
+    display: none;
+}
+@media only screen and (max-width: 767px){
+    #mobile-header {
+        display: block;
+    }
 }
 
-.slideout-panel {
-  position:absolute;
-  z-index: 1;
-  will-change: transform;
-}
-
-.slideout-open,
-.slideout-open body,
-.slideout-open .slideout-panel {
-  overflow: hidden;
-}
-
-.slideout-open .slideout-menu {
-  display: block;
+#simple-menu {
+    position: absolute;
+    z-index: 1;
 }

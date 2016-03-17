@@ -10,17 +10,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">    
 
     <link rel="stylesheet" type="text/css" href="main.css">    
-
+    <link rel="stylesheet" href="node_modules/sidr/dist/stylesheets/jquery.sidr.light.min.css">
     </head>
-    
-<body>
-<nav id="menu" class="menu slideout-menu">
-  <header class="menu-header">
-      <h2>TaMigDit</h2>
-  </header>
-    <section class="menu-section">
-      <h3 class="menu-section-title"></h3>
-        <input type="text" name="origin" placeholder="Från" id="origin-field"><br>
+    <body>
+        
+<a id="simple-menu" href="#sidr">☰</a>
+
+<div id="sidr">
+
+        <input type="text" name="origin" placeholder="Från" id="origin-field" value="Nuvarande position"><br>
         <input type="text" name="destination" placeholder="Till" id="destination-field">
         <form>
             <input type="radio" name="transitTime" id="departure" value="departure" checked> Avgång
@@ -28,17 +26,10 @@
         </form>
         <input id="timeInput" type="time">
         <button type="button" id="go-button">Sök</button>
-        <span id="errorspace"></span>
-    </section>
-</nav>
-
-<main id="panel" class="panel">      
-        <button class="toggle-button">☰</button>
-        <input type="text" name="destination" placeholder="Till" id="destination-field">
-        <button type="button" id="go-button">Sök</button>
-</main>
+        <div id="errorspace"></div>
+    
+</div>
         <div id="map"></div>
-        <div id="debugArea"></div> 
 
     <!--
     <footer class="panel-footer"></footer>
@@ -48,8 +39,17 @@
     </script>
     <script src="map.js">
     </script>
-    <script src="node_modules/slideout/dist/slideout.min.js"></script>
-    <script src="Slideout.js"></script>
+
+    <script src="//cdn.jsdelivr.net/jquery/2.2.0/jquery.min.js"></script>
+    <script src="node_modules/sidr/dist/jquery.sidr.min.js"></script>
+    <script src="menu.js"></script>
+    
+<script>
+$(document).ready(function() {
+  $('#simple-menu').sidr();
+});
+</script>
+
     
 </body>
 
