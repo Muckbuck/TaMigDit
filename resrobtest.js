@@ -1,7 +1,4 @@
-var timeArray = [];
-var transTypeArray = [];
-var transNumArray = [];
-var destNameArray = [];
+
 (function ($) {
     var url = 'https://api.resrobot.se/trip?key=c3770f94-ea2e-427a-95ba-1c1da47b421b&originCoordLat=55.605099&originCoordLong=13.003036&destCoordLat=55.609223&destCoordLong=13.006868&format=json&jsonpCallback=?';
 
@@ -18,6 +15,7 @@ var destNameArray = [];
             var trip = json.Trip;
             var tripLength = trip.length;
             var legLength = leg.length;
+            
             for (y = 0; y < tripLength; y++) {
                 for (i = 0; i < legLength; i++) {
 
@@ -27,19 +25,7 @@ var destNameArray = [];
                         console.log(json.Trip[y].LegList.Leg[i].Destination.time, json.Trip[y].LegList.Leg[i].Product.catOutL, json.Trip[y].LegList.Leg[i].Product.num, ' to ', json.Trip[0].LegList.Leg[i].Destination.name);
 
 
-                        timeArray.push(JSON.stringify(json.Trip[y].LegList.Leg[i].Destination.time));
-                        transTypeArray.push(JSON.stringify(json.Trip[y].LegList.Leg[i].Product.catOutL));
-                        transNumArray.push(JSON.stringify(json.Trip[y].LegList.Leg[i].Product.num));
-                        destNameArray.push(JSON.stringify(json.Trip[0].LegList.Leg[i].Destination.name));
-                        console.log(timeArray);
-                        console.log(transTypeArray);
-                        console.log(transNumArray);
-                        console.log(destNameArray);
-
-
-                    } else {
-                        console.log(json.Trip[y].LegList.Leg[i].Destination.time, json.Trip[y].LegList.Leg[i].type, ' to ', json.Trip[y].LegList.Leg[i].Destination.name);
-                    }
+                    } 
                 }
             }
             console.log(legLength)

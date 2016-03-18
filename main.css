@@ -47,8 +47,6 @@ table {
 	border-spacing: 0;
 }
 
-
-
 html,body {
     width: 100%;
     height: 100%;
@@ -64,6 +62,24 @@ html,body {
 */
 /*Slider
 */
+#sidr {
+    background:#1693BD;
+    box-shadow: 0 0 5px 5px #2892B1 inset;
+}
+
+#menu-destination-field,#origin-field {
+    width: 95%;
+    margin-top: 2%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;  
+}
+
+#menu-go-button {
+    width: 95%;
+    margin-left: 2.3%;
+}
+
 
 #mobile-header {
     display: none;
@@ -78,9 +94,10 @@ html,body {
     position: absolute;
     z-index: 1;
 }
-/*
-#search-field {
+
+#menu-search {
     position: absolute;
     z-index: 1;
-    margin-left:2%;
-}*/
+    margin:0.4%;
+    box-sizing: border-box;
+}
