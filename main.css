@@ -112,10 +112,6 @@ html,body {
     width: 48px!important;
 }
 
-@media only screen and (max-width: 767px){
-    #mobile-header {
-        display: block;
-    }
 }
 #timeInput{
     text-align: center;
