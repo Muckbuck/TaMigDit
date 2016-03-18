@@ -1,13 +1,10 @@
-function getResData () {
+function getResData() {
+    console.log("getResDeta");
     var url = 'https://api.resrobot.se/trip?key=c3770f94-ea2e-427a-95ba-1c1da47b421b&originCoordLat=' +
-        currentRouteData.currentPos.lat +
-        '&originCoordLong=' +
-        currentRouteData.currentPos.lng +
-        '&destCoordLat=' +
-        currentRouteData.destination.lat +
-        '&destCoordLong=' +
-        currentRouteData.destination.lng +
-        '&format=json&jsonpCallback=?';
+        currentRouteData.currentPos.lat + '&originCoordLong=' +
+        currentRouteData.currentPos.lng + '&destCoordLat=' +
+        currentRouteData.destination.lat + '&destCoordLong=' +
+        currentRouteData.destination.lng + '&format=json&jsonpCallback=?';
 
 
     $.ajax({
@@ -28,18 +25,20 @@ function getResData () {
 
             for (y = 0; y < tripLength; y++) {
                 for (i = 0; i < legLength; i++) {
-
-
-
                     if (leg[i].hasOwnProperty('Product')) {
                         var jsonTime = json.Trip[y].LegList.Leg[i].Origin.time;
                         var subTime = jsonTime.substring(0, 5);
 
-                        console.log(subTime, json.Trip[y].LegList.Leg[i].Product.catOutL, json.Trip[y].LegList.Leg[i].Product.num, ' to ', json.Trip[0].LegList.Leg[i].Destination.name);
+                        console.log(subTime, 
+        json.Trip[y].LegList.Leg[i].Product.catOutL, 
+        json.Trip[y].LegList.Leg[i].Product.num, ' to ', 
+        json.Trip[0].LegList.Leg[i].Destination.name);
 
 
 
-                        document.getElementById('transTimes').innerHTML += subTime + ' ' + json.Trip[y].LegList.Leg[i].Product.catOutL + ' ' + json.Trip[y].LegList.Leg[i].Product.num + ' to ' + json.Trip[0].LegList.Leg[i].Destination.name + '<br></br>';
+                        document.getElementById('errorspace').innerHTML += subTime + ' ' +                                       json.Trip[y].LegList.Leg[i].Product.catOutL + ' ' +
+        json.Trip[y].LegList.Leg[i].Product.num + ' to ' +
+        json.Trip[0].LegList.Leg[i].Destination.name + '<br></br>';
 
 
                     }

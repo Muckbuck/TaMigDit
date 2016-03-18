@@ -8,7 +8,6 @@ var currentPos = {
     lat: 56.605099,
     lng: 13.003036
 };
-/*****************************/
 
 /* Ändra tidsväljaren till nuvarande tid */
 var d = new Date();
@@ -32,6 +31,8 @@ document.getElementById("origin-field").addEventListener('focus', function (e) {
     }
 }, true);
 /**************************************************/
+
+/* Ser till att båda destinationsfält har samma info */
 var firstField = document.getElementById('destination-field'),
     secondField = document.getElementById('menu-destination-field');
 
@@ -76,14 +77,18 @@ function initMap() {
     map.mapTypes.set(customMapTypeId, customMapType);
     map.setMapTypeId(customMapTypeId);
 
-    directionsDisplay.setMap(map);
-    /*
+    var errorspace = document.getElementById('errorspace');
+    
+    
     var rendererOptions = {
-      map: map,
-      suppressMarkers : true
-    }
+        map: map,
+        //panel: errorspace,
+        hideRouteList: true
+    };
     directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-    */
+    
+    directionsDisplay.setMap(map);
+    
     infowindow = new google.maps.InfoWindow();
 
     var service = new google.maps.places.PlacesService(map);
@@ -187,17 +192,18 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
                 response.routes[0].legs[0].end_address;
             document.getElementById("menu-destination-field").value =
                 response.routes[0].legs[0].end_address;
-
-
+            
+            
+            
             directionsDisplay.setDirections(response);
-
+            
+            getResData();
+            
+            /********* Massa loggad info, inget mer ***************************//*
             if (response.routes[0].legs[0].arrival_time.text != undefined) {
-
                 console.log("Departure time: " + response.routes[0].legs[0].departure_time.text);
                 console.log("Arrival time: " + response.routes[0].legs[0].arrival_time.text);
-
             }
-
 
             var steps = response.routes[0].legs[0].steps;
             var stegNr = 0;
@@ -223,7 +229,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
                         steps[i].duration.text);
                 }
             }
-            //console.log(currentRouteData);
+            /********************************************************************/
         } else {
             console.log(status);
             if (status == "ZERO_RESULTS") {
@@ -265,3 +271,4 @@ function searchByButton() {
 function getCurrentRouteData() {
     return currentRouteData;
 }
+
