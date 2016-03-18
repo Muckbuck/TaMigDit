@@ -83,12 +83,48 @@ html,body {
 #mobile-header {
     display: none;
 }
+.xdsoft_datetimepicker {
+    padding: 0!important;
+}
+
+.xdsoft_datetimepicker .xdsoft_datepicker {
+    width: 196px!important;
+    margin-left: 1px!important;
+}
+.xdsoft_datetimepicker .xdsoft_timepicker {
+    width: 60px!important;
+    float: left!important;
+    text-align: center!important;
+    margin-left: 1px!important;
+}
+
+.xdsoft_datetimepicker .xdsoft_datepicker.active+.xdsoft_timepicker {
+    margin-top: 9px!important;
+}
+.xdsoft_datetimepicker .xdsoft_month{
+    width: 70px!important;
+    text-align: left!important;
+}
+.xdsoft_today_button {
+    display: none!important;
+}
+.xdsoft_datetimepicker .xdsoft_year {
+    width: 48px!important;
+}
+
 @media only screen and (max-width: 767px){
     #mobile-header {
         display: block;
     }
 }
-
+#timeInput{
+    text-align: center;
+    margin-top: 8px;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    background: white;
+}
 #menu-search {
     position: absolute;
     z-index: 1;
