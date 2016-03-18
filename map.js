@@ -64,6 +64,7 @@ function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: currentPos,
         zoom: 8,
+        mapTypeControl: false,
         mapTypeControlOptions: {
             style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
             position: google.maps.ControlPosition.TOP_RIGHT,
