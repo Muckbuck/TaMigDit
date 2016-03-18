@@ -1,11 +1,10 @@
 var map;
 var infowindow;
-var currentPos;
 var directionsService;
 var directionsDisplay;
 var currentRouteData = {};
 /*Default nuvarande position*/
-currentPos = {
+var currentPos = {
     lat: 56.605099,
     lng: 13.003036
 };
@@ -15,18 +14,18 @@ currentPos = {
 var d = new Date();
 var currentHour = d.getHours();
 if (currentHour < 10) {
-    currentHour = "0"+currentHour;
+    currentHour = "0" + currentHour;
 }
 var currentMinute = d.getMinutes();
 if (currentMinute < 10) {
-    currentMinute = "0"+currentMinute;
+    currentMinute = "0" + currentMinute;
 }
-document.getElementById("timeInput").value = currentHour+":"+currentMinute;
+document.getElementById("timeInput").value = currentHour + ":" + currentMinute;
 /******************************************/
 
 /* Resnar originfältet första gången den markeras */
 var defaultOrigin = true;
-document.getElementById("origin-field").addEventListener('focus',function(e){
+document.getElementById("origin-field").addEventListener('focus', function (e) {
     if (defaultOrigin) {
         this.value = '';
         defaultOrigin = false;
@@ -37,30 +36,32 @@ var firstField = document.getElementById('destination-field'),
     secondField = document.getElementById('menu-destination-field');
 
 firstField.onkeyup = function () {
-  secondField.value = firstField.value;
+    secondField.value = firstField.value;
 };
 secondField.onkeyup = function () {
-  firstField.value = secondField.value;
+    firstField.value = secondField.value;
 };
 
 
 function initMap() {
     directionsService = new google.maps.DirectionsService;
     directionsDisplay = new google.maps.DirectionsRenderer;
-    
+
     var customMapType = new google.maps.StyledMapType([
 
-      {
-        "featureType": "transit.station.bus",
-        "stylers": [
-          { "hue": "#1900ff" }
+        {
+            "featureType": "transit.station.bus",
+            "stylers": [
+                {
+                    "hue": "#1900ff"
+                }
         ]
       }
     ], {
-      name: 'Custom Style'
-  });
-  var customMapTypeId = 'custom_style';
-    
+        name: 'Custom Style'
+    });
+    var customMapTypeId = 'custom_style';
+
     map = new google.maps.Map(document.getElementById('map'), {
         center: currentPos,
         zoom: 8,
@@ -71,10 +72,10 @@ function initMap() {
             mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId]
         }
     });
-    
+
     map.mapTypes.set(customMapTypeId, customMapType);
     map.setMapTypeId(customMapTypeId);
-    
+
     directionsDisplay.setMap(map);
     /*
     var rendererOptions = {
@@ -93,15 +94,15 @@ function initMap() {
     } else {
         console.log("Geolocation not supported");
     }
-    
-    
+
+
     /* Vid manuell input */
     document.getElementById("go-button").addEventListener("click", searchByButton);
     document.getElementById("menu-go-button").addEventListener("click", searchByButton);
-                                                          
+
 
     /*************************/
-    
+
     /* Vid klickning på kartan */
     map.addListener('click', function (event) {
         if (document.getElementById("departure").checked == true) {
@@ -111,16 +112,16 @@ function initMap() {
             var arrival = getInputTime();
             var departure = new Date(0);
         }
-        
+
         var destination = {
             lat: event.latLng.lat(),
             lng: event.latLng.lng()
         };
         console.log(destination);
-        calculateAndDisplayRoute(directionsService, directionsDisplay, 
-                                 currentPos, destination,
-                                 departure, arrival);
-        
+        calculateAndDisplayRoute(directionsService, directionsDisplay,
+            currentPos, destination,
+            departure, arrival);
+
     });
     /***********************/
 }
@@ -149,14 +150,14 @@ function setPosition(position) {
     map.setCenter(currentPos);
     map.setZoom(15);
     createSimpleMarker(currentPos, "Din nuvarande position");
-    
+
     var infowindow3 = new google.maps.InfoWindow({
         content: "Din position"
     });
 }
 
-function calculateAndDisplayRoute(directionsService, directionsDisplay, 
-                                   origin, destination, departure, arrival) {
+function calculateAndDisplayRoute(directionsService, directionsDisplay,
+    origin, destination, departure, arrival) {
     /* Tar emot två positioner, origin och destination och räknar ut bästa
      * resväg med kollektivtrafik och visar upp resvägen på karta.
      * Kan även ta emot departure och arrival tid och inkludera det i sökningen.*/
@@ -168,42 +169,42 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
         transitOptions: {
             departureTime: departure,
             arrivalTime: arrival
-          },
+        },
     }, function (response, status) {
         if (status === google.maps.DirectionsStatus.OK) {
             /* Vid lyckad sökning: */
             currentRouteData = {
-                departure: departure, 
+                departure: departure,
                 arrival: arrival,
                 currentPos: currentPos,
                 destination: destination
             };
-            
-            
+
+
             console.log(response.routes[0].legs[0]);
             document.getElementById('errorspace').innerHTML = "";
-            document.getElementById("destination-field").value = 
+            document.getElementById("destination-field").value =
                 response.routes[0].legs[0].end_address;
-            document.getElementById("menu-destination-field").value = 
+            document.getElementById("menu-destination-field").value =
                 response.routes[0].legs[0].end_address;
-            
-            
+
+
             directionsDisplay.setDirections(response);
-            
+
             if (response.routes[0].legs[0].arrival_time.text != undefined) {
-                
+
                 console.log("Departure time: " + response.routes[0].legs[0].departure_time.text);
                 console.log("Arrival time: " + response.routes[0].legs[0].arrival_time.text);
-                
+
             }
-            
-            
+
+
             var steps = response.routes[0].legs[0].steps;
             var stegNr = 0;
-            for (i = 0; i < steps.length; i++) { 
-                
-                
-                if (steps[i].travel_mode == "TRANSIT"){
+            for (i = 0; i < steps.length; i++) {
+
+
+                if (steps[i].travel_mode == "TRANSIT") {
                     var lineName;
                     if (steps[i].transit.line.short_name) {
                         lineName = steps[i].transit.line.short_name;
@@ -212,15 +213,15 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
                         lineName = steps[i].transit.line.name;
                         stegNr++;
                     }
-                    console.log("Steg "+stegNr+": "+
-                                steps[i].transit.line.vehicle.name+
-                                "[" + lineName + "] " +
-                                steps[i].transit.departure_time.text + " " +
-                                steps[i].transit.departure_stop.name + " > " +
-                                steps[i].transit.arrival_time.text + " " +
-                                steps[i].transit.arrival_stop.name + " - " +
-                                steps[i].duration.text);
-                }   
+                    console.log("Steg " + stegNr + ": " +
+                        steps[i].transit.line.vehicle.name +
+                        "[" + lineName + "] " +
+                        steps[i].transit.departure_time.text + " " +
+                        steps[i].transit.departure_stop.name + " > " +
+                        steps[i].transit.arrival_time.text + " " +
+                        steps[i].transit.arrival_stop.name + " - " +
+                        steps[i].duration.text);
+                }
             }
             //console.log(currentRouteData);
         } else {
@@ -228,37 +229,37 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
             if (status == "ZERO_RESULTS") {
                 document.getElementById('errorspace').innerHTML = "Kunde inte hitta någon väg till vald destination";
             } else {
-                document.getElementById('errorspace').innerHTML = 'Directions request failed due to ' + status; 
+                document.getElementById('errorspace').innerHTML = 'Directions request failed due to ' + status;
             }
         }
     });
 }
 
 function getInputTime() {
-        /* Hämtar tiden från tidsinputfältet och gör om det till ett date objekt */
-        return new Date(d.getFullYear(),d.getMonth()+1,d.getDate(),
-                                     document.getElementById("timeInput").value.substring(0,2),
-                                     document.getElementById("timeInput").value.substring(3,5),
-                                     00,00);
-    }
+    /* Hämtar tiden från tidsinputfältet och gör om det till ett date objekt */
+    return new Date(d.getFullYear(), d.getMonth() + 1, d.getDate(),
+        document.getElementById("timeInput").value.substring(0, 2),
+        document.getElementById("timeInput").value.substring(3, 5),
+        00, 00);
+}
 
 function searchByButton() {
-        var destination = document.getElementById("destination-field").value;
-        if (document.getElementById("departure").checked == true) {
-            var departure = getInputTime();
-            var arrival = new Date(0);
-        } else {
-            var arrival = getInputTime();
-            var departure = new Date(0);
-        }
-        if (document.getElementById("origin-field").value && 
-            document.getElementById("origin-field").value != "Nuvarande position"){
-            currentPos = document.getElementById("origin-field").value;
-        }
-        calculateAndDisplayRoute(directionsService, directionsDisplay, 
-                                 currentPos, destination,
-                                 departure, arrival);
-        
+    var destination = document.getElementById("destination-field").value;
+    if (document.getElementById("departure").checked == true) {
+        var departure = getInputTime();
+        var arrival = new Date(0);
+    } else {
+        var arrival = getInputTime();
+        var departure = new Date(0);
+    }
+    if (document.getElementById("origin-field").value &&
+        document.getElementById("origin-field").value != "Nuvarande position") {
+        currentPos = document.getElementById("origin-field").value;
+    }
+    calculateAndDisplayRoute(directionsService, directionsDisplay,
+        currentPos, destination,
+        departure, arrival);
+
 }
 
 function getCurrentRouteData() {
