@@ -13,65 +13,71 @@
     <link rel="stylesheet" type="text/css" href="main.css">
     <link rel="stylesheet" href="node_modules/sidr/dist/stylesheets/jquery.sidr.light.min.css">
     <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-         
+
 </head>
 
 <body>
 
-    <div id="menu-search">
-        <div class="input-group">
-            <div class="input-group-btn">
-                <a href="#sidr" id="simple-menu-button" class="btn btn-default" role="button"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a> </div>
-            <input type="text" name="destination" class="form-control" aria-label="Till" id="destination-field">
-            <div class="input-group-btn">
-                <button type="button" class="btn btn-default" id="go-button">Sök</button>
+    <main>
+
+        <div id="search-field">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <a href="#sidr" id="simple-menu-button" class="btn btn-default" role="button"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a> </div>
+                <input type="text" name="destination" class="form-control" aria-label="Till" id="destination-field">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" id="go-button">Sök</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="sidr">
+        <div id="sidr">
 
-        <input type="text" name="origin" class="form-control" id="origin-field" aria-label="Nuvarande position" placeholder="Nuvarande position">
-        <input type="text" name="destination" class="form-control" id="menu-destination-field" aria-label="Till" placeholder="Till">
-        
-        <form>
-            <div class="btn-group btn-group-justified" data-toggle="buttons">
-                
-                <label class="btn btn-primary active">
-                    <input type="radio" name="transitTime" id="departure" value="departure" class="btn btn-default" checked>Avgång</label>
-                <label class="btn btn-primary">
-                    <input type="radio" name="transitTime" id="arrival" value="arrival" class="btn btn-default">Ankomst</label>
+            <input type="text" name="origin" class="form-control" id="origin-field" aria-label="Nuvarande position" placeholder="Nuvarande position">
+            <input type="text" name="destination" class="form-control" id="menu-destination-field" aria-label="Till" placeholder="Till">
+
+            <form>
+                <div class="btn-group btn-group-justified" data-toggle="buttons">
+
+                    <label class="btn btn-primary active">
+                        <input type="radio" name="transitTime" id="departure" value="departure" class="btn btn-default" checked>Avgång</label>
+                    <label class="btn btn-primary">
+                        <input type="radio" name="transitTime" id="arrival" value="arrival" class="btn btn-default">Ankomst</label>
+                </div>
+            </form>
+
+            <input id="timeInput" type="time">
+            <input id="dateInput" type="date">
+
+            <button type="button" class="btn btn-default" id="menu-go-button">Sök</button>
+            <div id="errorspace"></div>
+            <div id="transit-schedule">
+            
             </div>
-        </form>
+        </div>
 
-        <input id="timeInput" type="time">
-        <input id="dateInput" type="date">     
+        <div id="map"></div>
 
-        <button type="button" class="btn btn-default" id="menu-go-button">Sök</button>
-        <div id="errorspace"></div>
-        
-    </div>
-    
-    <div id="map"></div>
-
-    <!--
+        <!--
     <footer class="panel-footer"></footer>
     -->
+
+    </main>
+
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNePwQxex-MkHNGg6MIVDDwJDEM-zvsmk
         &libraries=places&callback=initMap"></script>
-        
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/jquery/2.2.0/jquery.min.js"></script>
 
     <script src="node_modules/sidr/dist/jquery.sidr.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    
+
     <script src="menu.js"></script>
     <script src="map.js"></script>
     <script src="resrobtest.js"></script>
- 
-    
-    
+
+
 </body>
 
 </html>
