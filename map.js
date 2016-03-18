@@ -20,6 +20,9 @@ if (currentMinute < 10) {
     currentMinute = "0" + currentMinute;
 }
 document.getElementById("timeInput").value = currentHour + ":" + currentMinute;
+
+console.log(d.getMonth() + 1);
+console.log(d.getFullYear()+0);
 /******************************************/
 
 /* Resnar originfältet första gången den markeras */
@@ -44,12 +47,11 @@ secondField.onkeyup = function () {
 };
 
 
-function initMap() {
+window.initMap = function(){
     directionsService = new google.maps.DirectionsService;
     directionsDisplay = new google.maps.DirectionsRenderer;
-
+    
     var customMapType = new google.maps.StyledMapType([
-
         {
             "featureType": "transit.station.bus",
             "stylers": [
@@ -174,7 +176,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
         transitOptions: {
             departureTime: departure,
             arrivalTime: arrival
-        },
+        }
     }, function (response, status) {
         if (status === google.maps.DirectionsStatus.OK) {
             /* Vid lyckad sökning: */
@@ -186,7 +188,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
             };
 
 
-            console.log(response.routes[0].legs[0]);
+            //console.log(response.routes[0].legs[0]);
             document.getElementById('errorspace').innerHTML = "";
             document.getElementById("destination-field").value =
                 response.routes[0].legs[0].end_address;
@@ -197,6 +199,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
             
             directionsDisplay.setDirections(response);
             
+            /*Här körs getResData() som finns i resrobtest.js*/
             getResData();
             
             /********* Massa loggad info, inget mer ***************************//*
