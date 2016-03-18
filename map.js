@@ -31,21 +31,45 @@ document.getElementById("origin-field").addEventListener('focus',function(e){
     }
 }, true);
 /**************************************************/
-
+/*testrad för att se github*/
 function initMap() {
     var directionsService = new google.maps.DirectionsService;
     var directionsDisplay = new google.maps.DirectionsRenderer;
+    
+    var customMapType = new google.maps.StyledMapType([
+
+      {
+        "featureType": "transit.station.bus",
+        "stylers": [
+          { "hue": "#1900ff" }
+        ]
+      }
+    ], {
+      name: 'Custom Style'
+  });
+  var customMapTypeId = 'custom_style';
     
     map = new google.maps.Map(document.getElementById('map'), {
         center: currentPos,
         zoom: 8,
         mapTypeControlOptions: {
             style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-            position: google.maps.ControlPosition.TOP_RIGHT
+            position: google.maps.ControlPosition.TOP_RIGHT,
+            mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId]
         }
     });
-    directionsDisplay.setMap(map);
     
+    map.mapTypes.set(customMapTypeId, customMapType);
+    map.setMapTypeId(customMapTypeId);
+    
+    directionsDisplay.setMap(map);
+    /*
+    var rendererOptions = {
+      map: map,
+      suppressMarkers : true
+    }
+    directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+    */
     infowindow = new google.maps.InfoWindow();
 
     var service = new google.maps.places.PlacesService(map);
@@ -58,24 +82,14 @@ function initMap() {
     }
     
     
-    function getInputDeparture() {
-        return new Date(d.getFullYear(),d.getMonth()+1,d.getDate(),
-                                     document.getElementById("timeInput").value.substring(0,2),
-                                     document.getElementById("timeInput").value.substring(3,5),
-                                     00,00);
-    }
-    
     /* Vid manuell input */
     document.getElementById("go-button").addEventListener("click", function(){
         var destination = document.getElementById("destination-field").value;
         if (document.getElementById("departure").checked == true) {
-            var departure = getInputDeparture();
+            var departure = getInputTime();
             var arrival = new Date(0);
         } else {
-            var arrival = new Date(d.getFullYear(),d.getMonth()+1,d.getDate(),
-                                     document.getElementById("timeInput").value.substring(0,2),
-                                     document.getElementById("timeInput").value.substring(3,5),
-                                     00,00);
+            var arrival = getInputTime();
             var departure = new Date(0);
         }
         if (document.getElementById("origin-field").value && 
@@ -92,16 +106,10 @@ function initMap() {
     /* Vid klickning på kartan */
     map.addListener('click', function (event) {
         if (document.getElementById("departure").checked == true) {
-            var departure = new Date(d.getFullYear(),d.getMonth()+1,d.getDate(),
-                                     document.getElementById("timeInput").value.substring(0,2),
-                                     document.getElementById("timeInput").value.substring(3,5),
-                                     00,00);
+            var departure = getInputTime();
             var arrival = new Date(0);
         } else {
-            var arrival = new Date(d.getFullYear(),d.getMonth()+1,d.getDate(),
-                                     document.getElementById("timeInput").value.substring(0,2),
-                                     document.getElementById("timeInput").value.substring(3,5),
-                                     00,00);
+            var arrival = getInputTime();
             var departure = new Date(0);
         }
         
@@ -167,8 +175,10 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, 
             directionsDisplay.setDirections(response);
             document.getElementById("destination-field").value = 
                 response.routes[0].legs[0].end_address;
-            console.log("Arrival time: " + response.routes[0].legs[0].arrival_time.text);
-            console.log("Departure time: " + response.routes[0].legs[0].departure_time.text);
+            if (response.routes[0].legs[0].arrival_time.text != undefined) {
+                console.log("Arrival time: " + response.routes[0].legs[0].arrival_time.text);
+                console.log("Departure time: " + response.routes[0].legs[0].departure_time.text);
+            }
             var steps = response.routes[0].legs[0].steps;
             var stegNr = 0;
             for (i = 0; i < steps.length; i++) { 
@@ -181,14 +191,16 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, 
                         lineName = steps[i].transit.line.name;
                         stegNr++;
                     }
-                    console.log("Steg "+stegNr+": [" + lineName + "] " +
+                    console.log("Steg "+stegNr+": "+
+                                steps[i].transit.line.vehicle.name+
+                                "[" + lineName + "] " +
+                                steps[i].transit.departure_time.text + " " +
                                 steps[i].transit.departure_stop.name + " > " +
+                                steps[i].transit.arrival_time.text + " " +
                                 steps[i].transit.arrival_stop.name + " - " +
                                 steps[i].duration.text);
-                }
-                
+                }   
             }
-            //console.log(response.routes[0].legs[0].steps
         } else {
             console.log(status);
             if (status == "ZERO_RESULTS") {
@@ -199,3 +211,11 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, 
         }
     });
 }
+
+function getInputTime() {
+        /* Hämtar tiden från tidsinputfältet och gör om det till ett date objekt */
+        return new Date(d.getFullYear(),d.getMonth()+1,d.getDate(),
+                                     document.getElementById("timeInput").value.substring(0,2),
+                                     document.getElementById("timeInput").value.substring(3,5),
+                                     00,00);
+    }
