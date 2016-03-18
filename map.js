@@ -1,6 +1,8 @@
 var map;
 var infowindow;
 var currentPos;
+var directionsService;
+var directionsDisplay;
 
 /*Default nuvarande position*/
 currentPos = {
@@ -31,10 +33,20 @@ document.getElementById("origin-field").addEventListener('focus',function(e){
     }
 }, true);
 /**************************************************/
-/*testrad för att se github*/
+var firstField = document.getElementById('destination-field'),
+    secondField = document.getElementById('menu-destination-field');
+
+firstField.onkeyup = function () {
+  secondField.value = firstField.value;
+};
+secondField.onkeyup = function () {
+  firstField.value = secondField.value;
+};
+
+
 function initMap() {
-    var directionsService = new google.maps.DirectionsService;
-    var directionsDisplay = new google.maps.DirectionsRenderer;
+    directionsService = new google.maps.DirectionsService;
+    directionsDisplay = new google.maps.DirectionsRenderer;
     
     var customMapType = new google.maps.StyledMapType([
 
@@ -83,24 +95,10 @@ function initMap() {
     
     
     /* Vid manuell input */
-    document.getElementById("go-button").addEventListener("click", function(){
-        var destination = document.getElementById("destination-field").value;
-        if (document.getElementById("departure").checked == true) {
-            var departure = getInputTime();
-            var arrival = new Date(0);
-        } else {
-            var arrival = getInputTime();
-            var departure = new Date(0);
-        }
-        if (document.getElementById("origin-field").value && 
-            document.getElementById("origin-field").value != "Nuvarande position"){
-            currentPos = document.getElementById("origin-field").value;
-        }
-        calculateAndDisplayRoute(directionsService, directionsDisplay, 
-                                 currentPos, destination,
-                                 departure, arrival);
-        
-    });
+    document.getElementById("go-button").addEventListener("click", searchByButton);
+    document.getElementById("menu-go-button").addEventListener("click", searchByButton);
+                                                          
+
     /*************************/
     
     /* Vid klickning på kartan */
@@ -175,6 +173,8 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, origin, 
             directionsDisplay.setDirections(response);
             document.getElementById("destination-field").value = 
                 response.routes[0].legs[0].end_address;
+            document.getElementById("menu-destination-field").value = 
+                response.routes[0].legs[0].end_address;
             if (response.routes[0].legs[0].arrival_time.text != undefined) {
                 console.log("Arrival time: " + response.routes[0].legs[0].arrival_time.text);
                 console.log("Departure time: " + response.routes[0].legs[0].departure_time.text);
@@ -219,3 +219,22 @@ function getInputTime() {
                                      document.getElementById("timeInput").value.substring(3,5),
                                      00,00);
     }
+
+function searchByButton() {
+        var destination = document.getElementById("destination-field").value;
+        if (document.getElementById("departure").checked == true) {
+            var departure = getInputTime();
+            var arrival = new Date(0);
+        } else {
+            var arrival = getInputTime();
+            var departure = new Date(0);
+        }
+        if (document.getElementById("origin-field").value && 
+            document.getElementById("origin-field").value != "Nuvarande position"){
+            currentPos = document.getElementById("origin-field").value;
+        }
+        calculateAndDisplayRoute(directionsService, directionsDisplay, 
+                                 currentPos, destination,
+                                 departure, arrival);
+        
+}
