@@ -1,7 +1,8 @@
 
 (function ($) {
     var url = 'https://api.resrobot.se/trip?key=c3770f94-ea2e-427a-95ba-1c1da47b421b&originCoordLat=55.605099&originCoordLong=13.003036&destCoordLat=55.609223&destCoordLong=13.006868&format=json&jsonpCallback=?';
-
+    
+    
     $.ajax({
         type: 'GET',
         url: url,
@@ -22,7 +23,9 @@
 
 
                     if (leg[i].hasOwnProperty('Product')) {
-                        console.log(json.Trip[y].LegList.Leg[i].Destination.time, json.Trip[y].LegList.Leg[i].Product.catOutL, json.Trip[y].LegList.Leg[i].Product.num, ' to ', json.Trip[0].LegList.Leg[i].Destination.name);
+                        console.log(json.Trip[y].LegList.Leg[i].Origin.time, json.Trip[y].LegList.Leg[i].Product.catOutL, json.Trip[y].LegList.Leg[i].Product.num, ' to ', json.Trip[0].LegList.Leg[i].Destination.name);
+                        
+                        document.getElementById('transTimes').innerHTML += json.Trip[y].LegList.Leg[i].Origin.time + ' '+ json.Trip[y].LegList.Leg[i].Product.catOutL +' '+ json.Trip[y].LegList.Leg[i].Product.num + ' to ' + json.Trip[0].LegList.Leg[i].Destination.name +  '<br></br>';
 
 
                     } 
