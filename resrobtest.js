@@ -1,5 +1,15 @@
-(function ($) {
-    var url = 'https://api.resrobot.se/trip?key=c3770f94-ea2e-427a-95ba-1c1da47b421b&originCoordLat=' + currentRouteData.currentPos.lat + '&originCoordLong=' + currentRouteData.currentPos.lng + '&destCoordLat=' + currentRouteData.destination.lat + '&destCoordLong=' + currentRouteData.destination.lng + '&format=json&jsonpCallback=?';
+
+
+function getResdata() {
+    var url = 'https://api.resrobot.se/trip?key=c3770f94-ea2e-427a-95ba-1c1da47b421b&originCoordLat=' + 
+        currentRouteData.currentPos.lat + 
+        '&originCoordLong=' + 
+        currentRouteData.currentPos.lng + 
+        '&destCoordLat=' + 
+        currentRouteData.destination.lat + 
+        '&destCoordLong=' + 
+        currentRouteData.destination.lng + 
+        '&format=json&jsonpCallback=?';
 
 
     $.ajax({
@@ -11,7 +21,7 @@
         dataType: 'jsonp',
         success: function (json) {
 
-            function getResData() {
+            
                 console.log(json);
                 var leg = json.Trip[0].LegList.Leg;
                 var trip = json.Trip;
@@ -35,7 +45,7 @@
                     }
                 }
                 console.log(legLength)
-            }
+           
             
         },
         error: function (e) {
@@ -43,6 +53,6 @@
         }
     });
 
-})(jQuery);
+}
 console.log("kek");
 console.log(currentRouteData);
