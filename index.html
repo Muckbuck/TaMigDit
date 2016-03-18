@@ -44,27 +44,38 @@
 
     <div id="sidr">
 
-        <input type="text" name="origin" placeholder="Från" id="origin-field" value="Nuvarande position">
-        <br>
-        <input type="text" name="destination" placeholder="Till" id="destination-field">
+        <input type="text" name="origin" class="form-control" placeholder="Från" id="origin-field" value="Nuvarande position">
+        <input type="text" name="destination" class="form-control" placeholder="Till" id="menu-destination-field" value="Till">
+        
         <form>
-            <div class="btn-group" data-toggle="buttons">
+            <div class="btn-group btn-group-justified" data-toggle="buttons">
+                
                 <label class="btn btn-primary active">
                     <input type="radio" name="transitTime" id="departure" value="departure" class="btn btn-default" checked>Avgång</label>
                 <label class="btn btn-primary">
                     <input type="radio" name="transitTime" id="arrival" value="arrival" class="btn btn-default">Ankomst</label>
             </div>
         </form>
-            <!--
-            <input type="radio" name="transitTime" id="departure" value="departure" checked> Avgång
-            <input type="radio" name="transitTime" id="arrival" value="arrival"> Ankomst
-            -->
-
+        <!--
+        <div class="form-group" id="menu-datetime">
+        <div class="row">
+            <div class="col-md-8">
+                <div id="datetimepicker12"></div>
+            </div>
+        </div>
+        </div>
+-->
+        
         <input id="timeInput" type="time">
-        <button type="button" id="go-button">Sök</button>
+        
+        
+        
+        
+        <button type="button" class="btn btn-default" id="menu-go-button">Sök</button>
         <div id="errorspace"></div>
-
+        
     </div>
+    
     <div id="map"></div>
 
     <!--
