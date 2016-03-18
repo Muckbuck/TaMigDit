@@ -6,7 +6,7 @@ $(document).ready(function() {
 });
 
 var faded = false;
-$( "#simple-menu-button" ).click(function() {
+$("#simple-menu-button").click(function() {
   
     if (!faded) {
         faded = true;
@@ -28,16 +28,11 @@ $( "#simple-menu-button" ).click(function() {
         
     }
 });
-
-/*
-/*DateTime picker
-$.datetimepicker.setLocale('en');
-
-jQuery('#datetimepicker3').datetimepicker({
-  format:'d.m.Y H:i',
-  inline:true,
-  lang:'en'
+        
+/*DateTime picker*/
+$(function () {
+    $('#datetimepicker12').datetimepicker({
+        inline: true
+        , sideBySide: true
+    });
 });
-
-jQuery('#datetimepicker').datetimepicker();
-*/
