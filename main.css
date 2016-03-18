@@ -80,7 +80,6 @@ html,body {
     margin-left: 2.3%;
 }
 
-
 #mobile-header {
     display: none;
 }
@@ -88,11 +87,6 @@ html,body {
     #mobile-header {
         display: block;
     }
-}
-
-#simple-menu {
-    position: absolute;
-    z-index: 1;
 }
 
 #menu-search {

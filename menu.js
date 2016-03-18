@@ -5,7 +5,6 @@ $(document).ready(function() {
     $('#simple-menu-button').sidr();
 });
 
-
 var faded = false;
 $( "#simple-menu-button" ).click(function() {
   
@@ -29,11 +28,16 @@ $( "#simple-menu-button" ).click(function() {
         
     }
 });
-        
-/*DateTime picker*/
-$(function () {
-    $('#datetimepicker12').datetimepicker({
-        inline: true
-        , sideBySide: true
-    });
+
+/*
+/*DateTime picker
+$.datetimepicker.setLocale('en');
+
+jQuery('#datetimepicker3').datetimepicker({
+  format:'d.m.Y H:i',
+  inline:true,
+  lang:'en'
 });
+
+jQuery('#datetimepicker').datetimepicker();
+*/
