@@ -256,6 +256,18 @@ main {
     background: #1DA1FF;
 }
 
+
+#floating-error {
+    margin-top:100px;
+    width:400px;
+    margin-left:auto;
+    margin-right:auto;
+    position: absolute;
+    /*left: 10px;
+    bottom: 10px;*/
+    z-index: 1000;
+}
+
 @media only screen and (max-width: 480px) {
     /*
     #sidr {

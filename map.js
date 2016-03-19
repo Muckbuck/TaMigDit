@@ -312,9 +312,12 @@ function searchByButton() {
         departure, arrival);
 
 }
+$( "#closeerror" ).click(function() {
+  hideError();
+});
 
 function displayError(message){
-    document.getElementById('floating-error').innerHTML = message;
+    document.getElementById('errortext').innerHTML = message;
     $( "#floating-error" ).fadeIn( "fast", function() {});
 }
 function hideError() {
