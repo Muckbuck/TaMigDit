@@ -94,7 +94,7 @@ window.initMap = function(){
     
     var rendererOptions = {
         map: map,
-        //panel: errorspace,
+        panel: transit-schedule,
         hideRouteList: true
     };
     directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
@@ -210,7 +210,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
             directionsDisplay.setDirections(response);
             
             /*Här körs getResData() som finns i resrobtest.js*/
-            getResData();
+            //getResData();
             
             /********* Massa loggad info, inget mer ***************************//*
             if (response.routes[0].legs[0].arrival_time.text != undefined) {
