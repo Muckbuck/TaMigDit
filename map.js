@@ -9,6 +9,9 @@ var currentPos = {
     lng: 13.003036
 };
 
+
+
+
 /* Ändra tid- och datumsväljaren till nuvarande tid */
 var d = new Date();
 var currentHour = d.getHours();
@@ -60,7 +63,7 @@ secondField.onkeyup = function () {
 window.initMap = function(){
     directionsService = new google.maps.DirectionsService;
     directionsDisplay = new google.maps.DirectionsRenderer;
-    
+    /*
     var customMapType = new google.maps.StyledMapType([
         {
             "featureType": "transit.station.bus",
@@ -74,7 +77,7 @@ window.initMap = function(){
         name: 'Custom Style'
     });
     var customMapTypeId = 'custom_style';
-
+*/
     map = new google.maps.Map(document.getElementById('map'), {
         center: currentPos,
         zoom: 8,
@@ -82,24 +85,39 @@ window.initMap = function(){
         mapTypeControlOptions: {
             style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
             position: google.maps.ControlPosition.TOP_RIGHT,
-            mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId]
+            //mapTypeIds: [google.maps.MapTypeId.ROADMAP, customMapTypeId]
         }
     });
-
+    /*
     map.mapTypes.set(customMapTypeId, customMapType);
     map.setMapTypeId(customMapTypeId);
-
-    var errorspace = document.getElementById('errorspace');
+    */
+    var transitArea = document.getElementById('transit-schedule');
     
     
     var rendererOptions = {
         map: map,
-        panel: transit-schedule,
+        panel: transitArea,
         hideRouteList: true
     };
     directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-    
     directionsDisplay.setMap(map);
+    
+
+
+
+    var defaultBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(70.4955735409, 29.53125),
+      new google.maps.LatLng(53.2257684358, 2.4609375));
+
+    var input = document.getElementById('destination-field');
+    var options = {
+      bounds: defaultBounds
+    };
+
+autocomplete = new google.maps.places.Autocomplete(input, options);
+    
+    
     
     infowindow = new google.maps.InfoWindow();
 
@@ -142,6 +160,8 @@ window.initMap = function(){
     });
     /***********************/
 }
+
+
 
 function createSimpleMarker(place, message) {
     /* Skapar en markör på position place */
