@@ -261,10 +261,11 @@ function getInputTime() {
                     document.getElementById("dateInput").value.substring(8, 10),
                     document.getElementById("timeInput").value.substring(0, 2),
                     document.getElementById("timeInput").value.substring(3, 5),
-                    00, 00);
+                    0, 0);
 }
 
 function searchByButton() {
+    /* Hämtar inputdata från html element utför en sökning med datan */
     var destination = document.getElementById("destination-field").value;
     if (document.getElementById("departure").checked == true) {
         var departure = getInputTime();

@@ -22,23 +22,26 @@ function getResData() {
             var trip = json.Trip;
             var tripLength = trip.length;
             var legLength = leg.length;
-
+            /* Trip loop */
             for (y = 0; y < tripLength; y++) {
+                /* leg loop */
                 for (i = 0; i < legLength; i++) {
                     if (leg[i].hasOwnProperty('Product')) {
+                        /*leg origin time*/
                         var jsonTime = json.Trip[y].LegList.Leg[i].Origin.time;
                         var subTime = jsonTime.substring(0, 5);
-
+                        
                         console.log(subTime, 
-        json.Trip[y].LegList.Leg[i].Product.catOutL, 
-        json.Trip[y].LegList.Leg[i].Product.num, ' to ', 
-        json.Trip[0].LegList.Leg[i].Destination.name);
+                            json.Trip[y].LegList.Leg[i].Product.catOutL, 
+                            json.Trip[y].LegList.Leg[i].Product.num, ' to ', 
+                            json.Trip[0].LegList.Leg[i].Destination.name);
 
 
-
-                        document.getElementById('errorspace').innerHTML += subTime + ' ' +                                       json.Trip[y].LegList.Leg[i].Product.catOutL + ' ' +
-        json.Trip[y].LegList.Leg[i].Product.num + ' to ' +
-        json.Trip[0].LegList.Leg[i].Destination.name + '<br></br>';
+                        /* leg.product,catOutL,num destination.name */
+                        document.getElementById('errorspace').innerHTML += subTime + ' ' +
+                            json.Trip[y].LegList.Leg[i].Product.catOutL + ' ' +
+                            json.Trip[y].LegList.Leg[i].Product.num + ' to ' +
+                            json.Trip[0].LegList.Leg[i].Destination.name + '<br></br>';
 
 
                     }
