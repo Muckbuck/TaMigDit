@@ -139,6 +139,10 @@ main {
     box-sizing: border-box;
 }
 
+#transit-schedule{margin-top: 15%; }
+#transit-schedule:nth-child(odd){background-color:cadetblue;}
+#transit-schedule:nth-child(odd){background-color:darkblue;}
+
 @media only screen and (max-width: 767px){
     #mobile-header {
         display: block;
