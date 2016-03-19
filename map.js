@@ -9,7 +9,7 @@ var currentPos = {
     lng: 13.003036
 };
 
-/* Ändra tidsväljaren till nuvarande tid */
+/* Ändra tid- och datumsväljaren till nuvarande tid */
 var d = new Date();
 var currentHour = d.getHours();
 if (currentHour < 10) {
@@ -21,8 +21,19 @@ if (currentMinute < 10) {
 }
 document.getElementById("timeInput").value = currentHour + ":" + currentMinute;
 
-console.log(d.getMonth() + 1);
-console.log(d.getFullYear()+0);
+var currentMonth = (d.getMonth() + 1);
+if (currentMonth < 10) {
+    currentMonth = "0" + currentMonth;
+}
+var currentDay = d.getDate();
+if (currentDay < 10) {
+    currentDay = "0" + currentDay;
+}
+var currentYear = (d.getFullYear()+0);
+
+document.getElementById("dateInput").value = 
+    currentYear+"-"+currentMonth+"-"+currentDay;
+
 /******************************************/
 
 /* Resnar originfältet första gången den markeras */
@@ -45,7 +56,6 @@ firstField.onkeyup = function () {
 secondField.onkeyup = function () {
     firstField.value = secondField.value;
 };
-
 
 window.initMap = function(){
     directionsService = new google.maps.DirectionsService;
@@ -246,10 +256,12 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
 
 function getInputTime() {
     /* Hämtar tiden från tidsinputfältet och gör om det till ett date objekt */
-    return new Date(d.getFullYear(), d.getMonth() + 1, d.getDate(),
-        document.getElementById("timeInput").value.substring(0, 2),
-        document.getElementById("timeInput").value.substring(3, 5),
-        00, 00);
+    return new Date(document.getElementById("dateInput").value.substring(0, 4), 
+                    document.getElementById("dateInput").value.substring(5, 7),
+                    document.getElementById("dateInput").value.substring(8, 10),
+                    document.getElementById("timeInput").value.substring(0, 2),
+                    document.getElementById("timeInput").value.substring(3, 5),
+                    00, 00);
 }
 
 function searchByButton() {
@@ -269,9 +281,5 @@ function searchByButton() {
         currentPos, destination,
         departure, arrival);
 
-}
-
-function getCurrentRouteData() {
-    return currentRouteData;
 }
 
