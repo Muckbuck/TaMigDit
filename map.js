@@ -342,24 +342,23 @@ function searchByButton() {
 
 /* Errormeddelande */
 
+$( "#closeerror" ).click(function() {
+    hideError();
+});
+
 function displayError(message){
     /* Visar errormeddelandet message */
     document.getElementById('errortext').innerHTML = message;
     document.getElementById('errorspace').innerHTML = message;
-    $( "#errorspace" ).addClass( "fancy" );
+    $( "#errorspace" ).addClass("alert alert-warning");
     $( "#floating-error" ).fadeIn( "fast", function() {});
 
 }
 function hideError() {
     /* Döljer aktivt errormeddelande */
     $( "#floating-error" ).fadeOut( "fast", function() {});
-    document.getElementById('errorspace').innerHTML = "";
-    $( "#errorspace" ).removeClass( "fancy" );
+    $( "#errorspace" ).removeClass("alert alert-warning");
 }
-
-$( "#closeerror" ).click(function() {
-  hideError();
-});
 
 /*********************/
 
@@ -398,3 +397,4 @@ function logGoogleTripData(response) {
 }
 
 /***********/
+    
