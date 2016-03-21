@@ -26,7 +26,7 @@
                     <a href="#sidr" id="simple-menu-button" class="btn btn-default" role="button"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a> </div>
                 <input type="text" name="destination" class="form-control" aria-label="Till" id="destination-field">
                 <div class="input-group-btn">
-                    <button type="button" class="btn btn-default" id="go-button">Sök</button>
+                    <button type="button" class="btn btn-default" id="go-button"><span class="glyphicon glyphicon-search" aria-hidden:"true"></span></button>
                 </div>
             </div>
         </div>
@@ -51,25 +51,30 @@
 
             <button type="button" class="btn btn-default" id="menu-go-button">Sök</button>
             <div id="errorspace"></div>
-            
+
             <div id="transit-schedule">
                 <div id="schedule-header">
-                
-                    
+
+
                 </div>
                 <div id="schedule-result">
-                
+
                 </div>
             </div>
-            
+
         </div>
          <div id="floating-error" class="alert alert-warning">
              <span id="errortext">Error, intruder alert</span>
              <a href="#" id="closeerror">&times;</a>
         </div>
         <div id="map"></div>
+        
+<div id="floating-error" class="alert alert-warning">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+<span id="error-text"></span>
+</div>
 
-        <!--
+            <!--
     <footer class="panel-footer"></footer>
     -->
 

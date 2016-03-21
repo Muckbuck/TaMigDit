@@ -239,51 +239,100 @@ main {
 #search-field {
     position: absolute;
     z-index: 1;
-    margin: 0.4%;
+    margin: 0.2%;
     box-sizing: border-box;
     width: 40%
+}
+
+#destination-field {
+    height: 39px;
+    font-size: 1.2em;
+}
+
+#go-button {
+    font-size: 18px;
+}
+
+.glyphicon-align-justify {
+    font-size: 20.3px;
+}
+
+#floating-error {
+    margin-top: 42px;
+    width: 39.8%;
+    position: absolute;
+    z-index: 1000;
+    margin-left: 0.5%;
+    display: none;
+}
+
+#floating-error a {
+    color: #337ab7;
+    text-decoration: none;
+    float: right;
 }
 
 .adp {
     color: #FCFEFF;
 }
-
 .adp-warnbox {
     display: none;
 }
-
 .adp-placemark {
     background: #1DA1FF;
 }
-
-
-#floating-error {
-    margin-top:100px;
-    width:400px;
-    margin-left:auto;
-    margin-right:auto;
-    position: absolute;
-    /*left: 10px;
-    bottom: 10px;*/
-    z-index: 1000;
-}
-
-@media only screen and (max-width: 480px) {
-    /*
-    #sidr {
-        width: 85%;
-    }
-    .sidr.left {
-        left: -85%;
-        right: auto;
-    }
-    */
+@media only screen and (max-width: 767px) {
     #search-field {
         width: 99%;
-        
+    }
+    
+    #floating-error {
+        margin-top: 5%;
+        width: 99%;
+    }
+    
+    #destination-field {
+        height: 39px;
+    }
+    
+    #go-button {
+        font-size: 18px;
+    }
+    
+    .glyphicon-align-justify {
+        font-size: 20.3px;
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    #mobile-header {
+        display: block;
+    }
+    
+    #search-field {
+        width: 83%;
+    }
+    
+    #floating-error {
+        margin-top: 5%;
+        width: 83%;
+    }
+    
+    #destination-field {
+        height: 40px;
+        font-size: 1.2em;
+    }
+    
+    #go-button {
+        font-size: 18.3px;
+    }
+    
+    #search-field {
+        width: 83%;
+    }
+    
+    .glyphicon-align-justify {
+        font-size: 21.3px;
     }
 }
 
-
-
-
+}
