@@ -24,7 +24,7 @@
             <div class="input-group">
                 <div class="input-group-btn">
                     <a href="#sidr" id="simple-menu-button" class="btn btn-default" role="button"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a> </div>
-                <input type="text" name="destination" class="form-control" aria-label="Till" id="destination-field">
+                <input type="text" name="destination" class="form-control" aria-label="Till" id="destination-field" placeholder="Välj destination eller klicka på kartan">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default" id="go-button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                 </div>
@@ -50,28 +50,19 @@
             <input id="dateInput" type="date">
 
             <button type="button" class="btn btn-default" id="menu-go-button">Sök</button>
-            <div id="errorspace"></div>
-
-            <div id="transit-schedule">
-                <div id="schedule-header">
-
-
-                </div>
-                <div id="schedule-result">
-
-                </div>
+        
+            <div id="errorspace" role="alert">
             </div>
-
+            
+            <div id="transit-schedule"></div>
+                
         </div>
-         <div id="floating-error" class="alert alert-warning">
-             <span id="errortext">Error, intruder alert</span>
-             <a href="#" id="closeerror">&times;</a>
-        </div>
+        
         <div id="map"></div>
         
 <div id="floating-error" class="alert alert-warning">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-<span id="error-text"></span>
+<span id="errortext"></span>
 </div>
 
             <!--
@@ -91,7 +82,7 @@
     <script src="menu.js"></script>
     
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNePwQxex-MkHNGg6MIVDDwJDEM-zvsmk
-        &libraries=places&callback=initMap"></script>
+        &libraries=places&callback=initMap&language=sv"></script>
     <script src="map.js"></script>
     <script src="resrobtest.js"></script>
 

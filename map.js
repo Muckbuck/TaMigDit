@@ -318,8 +318,11 @@ $( "#closeerror" ).click(function() {
 
 function displayError(message){
     document.getElementById('errortext').innerHTML = message;
+    document.getElementById('errorspace').innerHTML = message;
+    $( "#errorspace" ).addClass("alert alert-warning");
     $( "#floating-error" ).fadeIn( "fast", function() {});
 }
 function hideError() {
     $( "#floating-error" ).fadeOut( "fast", function() {});
+    $( "#errorspace" ).removeClass("alert alert-warning");
 }

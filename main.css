@@ -176,8 +176,8 @@ main {
 }
 
 #menu-go-button {
-    width: 95%;
-    margin-left: 2.3%;
+    width: 80%;
+    margin-left: 9.3%;
 }
 
 #mobile-header {
@@ -257,6 +257,13 @@ main {
     font-size: 20.3px;
 }
 
+#errorspace {
+    margin-top: 10px;
+    font-size: 12px;
+    padding-left: 3px;
+    padding-right: 1px;
+}
+
 #floating-error {
     margin-top: 45px;
     width: 39.85%;
@@ -279,8 +286,22 @@ main {
     display: none;
 }
 .adp-placemark {
-    background: #1DA1FF;
+    background: #FDFDFD!important;
+    border: 1px solid #A79FA2!important!;
 }
+.adp-summary {
+    background-color: #D6D8D5;
+}
+.adp-directions {
+    background-color:#FFFFFF;
+}
+.adp-agencies {
+    display: none;
+}
+.adp-details, .adp-legal {
+    display: none;
+}
+
 @media only screen and (max-width: 767px) {
     #search-field {
         width: 99%;
@@ -288,12 +309,14 @@ main {
     }
     
     #floating-error {
-        margin-top: 44x;
-        width: 98.6%;
+        margin-top: 48px;
+        width: 98.85%;
+        margin-left: 0.5%;
     }
     
     #destination-field {
         height: 39px;
+        font-size: 1.1em;
     }
     
     #go-button {
@@ -311,7 +334,6 @@ main {
     
     #search-field {
         width: 83%;
-        margin: 0.4%;
     }
     
     #floating-error {
