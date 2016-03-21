@@ -3,10 +3,11 @@ var infowindow = null;
 var directionsService;
 var directionsDisplay;
 var currentRouteData = {};
-var focusedField;
+var originFocused = true;
 var markers = [];
+var geocoder;
 /*Default nuvarande position*/
-var defaultPos = {
+var DefaultPos = {
     lat: 56.605099,
     lng: 13.003036
 }
@@ -77,7 +78,7 @@ window.initMap = function () {
     /*********************/
 
     map = new google.maps.Map(document.getElementById('map'), {
-        center: defaultPos,
+        center: DefaultPos,
         zoom: 8,
         mapTypeControl: false,
         mapTypeControlOptions: {
@@ -91,7 +92,7 @@ window.initMap = function () {
     map.setMapTypeId(customMapTypeId);
 
     var transitArea = document.getElementById('transit-schedule');
-
+    geocoder = new google.maps.Geocoder;
 
     var rendererOptions = {
         map: map
@@ -148,15 +149,16 @@ window.initMap = function () {
     /*************************/
     $( "#origin-field" ).focus(function() {
         console.log("targeted");
-        focusedField = "#origin-field";
+        originFocused = true;
     });
     $( "#destination-field, #menu-destination-field" ).focus(function() {
         console.log("untargeted");
-        focusedField = "";
+        originFocused = false;
     });
     /* Vid klickning på kartan */
     map.addListener('click', function (event) {
-        if (focusedField == "#origin-field") {
+        /* Bästäm origin med klick ifall originrutan markerats */
+        if (originFocused) {
             //var selectedPos =  {coords};
             //console.log(selectedPos);
             var selectedPos = {coords: {
@@ -165,9 +167,8 @@ window.initMap = function () {
             }};
             console.log(selectedPos);
             setPosition(selectedPos);
-            focusedField = "";
         } else {
-            
+            /* Annars utför sökning med klickad destination */
         
             if (document.getElementById("departure").checked == true) {
                 var departure = getInputTime();
@@ -198,10 +199,13 @@ function setPosition(position) {
     /* Ändrar currentPos till nuvarande geolocation position
      * och centrerar kartan på positionen*/
     currentPos = {
-        lat: position.coords.latitude
-        , lng: position.coords.longitude
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
     };
-
+    
+    reverseGeo(currentPos);
+    
+                
     map.setCenter(currentPos);
     map.setZoom(15);
     clearMarkers();
@@ -211,6 +215,7 @@ function setPosition(position) {
     var infowindow3 = new google.maps.InfoWindow({
         content: "Din position"
     });
+    originFocused = false;
 }
 
 function calculateAndDisplayRoute(directionsService, directionsDisplay
@@ -245,6 +250,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay
             document.getElementById("menu-destination-field").value =
                 response.routes[0].legs[0].end_address;
 
+
             hideError();
             directionsDisplay.setDirections(response);
 
@@ -265,21 +271,21 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay
 
                     }
 
-
                     stopCoords = {
-                            lat: steps[i].lat_lngs[0].lat(),
-                            lng: steps[i].lat_lngs[0].lng()
-                        }
+                        lat: steps[i].lat_lngs[0].lat(),
+                        lng: steps[i].lat_lngs[0].lng()
+                    }
                         //console.log(stopCoords);
                         //createSimpleMarker(stopCoords, "hej");
 
 
-                    setBusInfoWindow(stopCoords, "<div id='iw-container'> <div class='iw-header'>" + steps[i].transit.line.vehicle.name + " <b>" +
-                        lineName + "</b>, Riktning: " + steps[i].transit.headsign +
-                        "<p><b></div>" + steps[i].transit.departure_time.text + ",</b> Avresa från: " +
-                        steps[i].transit.departure_stop.name + "</p><p><b>" +
-                        steps[i].transit.arrival_time.text + ",</b> Ankomst: " +
-                        steps[i].transit.arrival_stop.name + "</p>" + "</div>"
+                    setBusInfoWindow(stopCoords, "<div id='iw-container'> <div class='iw-header'>" +
+                                    steps[i].transit.line.vehicle.name + " <b>" +
+                                    lineName + "</b>, Riktning: " + steps[i].transit.headsign +
+                                    "<p><b></div>" + steps[i].transit.departure_time.text + ",</b> Avresa från: " +
+                                    steps[i].transit.departure_stop.name + "</p><p><b>" +
+                                    steps[i].transit.arrival_time.text + ",</b> Ankomst: " +
+                                    steps[i].transit.arrival_stop.name + "</p>" + "</div>"
                     );
                     
                 }
@@ -347,29 +353,23 @@ function setBusInfoWindow (place, message) {
     iwBackground.children(':nth-child(4)').css({
         'display': 'none'
     });
-    
+    /* Tar bort stilen från default-infowindow */
     google.maps.event.addListener(infowindow, 'domready', function() {
+        var iwOuter = $('.gm-style-iw');
+        var iwBackground = iwOuter.prev();
 
-       var iwOuter = $('.gm-style-iw');
-       var iwBackground = iwOuter.prev();
-
-       iwBackground.children(':nth-child(2)').css({'display' : 'none'});
-
-       // Remove the white background DIV
-       iwBackground.children(':nth-child(4)').css({'display' : 'none'});
-
+        iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+        iwBackground.children(':nth-child(4)').css({'display' : 'none'});
     });
 
     var iwCloseBtn = iwOuter.next();
 
-    // Apply the desired effect to the close button
     iwCloseBtn.css({
-      opacity: '1', // by default the close button has an opacity of 0.7
-      right: '38px', top: '3px', // button repositioning
-      border: '7px solid #48b5e9', // increasing button border and new color
-      'border-radius': '13px', // circular effect
+      opacity: '1', 
+      right: '48px', top: '7px', 
+      'box-shadow': '0 0 0 2pt #48b5e9', 
+      'border-radius': '5px', 
       });
-
     // The API automatically applies 0.7 opacity to the button after the mouseout event.
     // This function reverses this event to the desired value.
     iwCloseBtn.mouseout(function(){
@@ -412,10 +412,6 @@ function searchByButton() {
 
 /* Errormeddelande */
 
-$("#closeerror").click(function () {
-    hideError();
-});
-
 function displayError(message) {
     /* Visar errormeddelandet message */
     document.getElementById('errortext').innerHTML = message;
@@ -431,11 +427,15 @@ function hideError() {
     $("#errorspace").removeClass("alert alert-warning");
 }
 
+$("#closeerror").click(function () {
+    /* Tar bort errormeddelande om avstängningskrysset klickas */
+    hideError();
+});
 /*********************/
 
 /* debug log*/
 function logGoogleTripData(response) {
-    /* Loggar data om routedatan i response i konsollen */
+    /* Loggar data om routen i 'response' i konsollen */
     if (response.routes[0].legs[0].arrival_time.text != undefined) {
         console.log("Departure time: " + response.routes[0].legs[0].departure_time.text);
         console.log("Arrival time: " + response.routes[0].legs[0].arrival_time.text);
@@ -470,3 +470,23 @@ function logGoogleTripData(response) {
 
 
 /***********/
+
+
+function reverseGeo(pos) {
+    console.log(pos.lat);
+    console.log(pos.lng);
+    
+    geocoder.geocode({'latLng': pos}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        if (results[1]) {
+          document.getElementById("origin-field").value = results[0].formatted_address;
+          /* Tänkte returna här men behövs callbacks pga async */
+        } else {
+          displayError("No results found");
+        }
+      } else {
+        displayError("Geocoder failed due to: " + status);
+      }
+    });
+}
+           
