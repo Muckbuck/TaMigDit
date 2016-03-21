@@ -258,11 +258,11 @@ main {
 }
 
 #floating-error {
-    margin-top: 42px;
-    width: 39.8%;
+    margin-top: 45px;
+    width: 39.85%;
     position: absolute;
     z-index: 1000;
-    margin-left: 0.5%;
+    margin-left: 0.3%;
     display: none;
 }
 
@@ -288,8 +288,8 @@ main {
     }
     
     #floating-error {
-        margin-top: 5%;
-        width: 99%;
+        margin-top: 44x;
+        width: 98.6%;
     }
     
     #destination-field {
@@ -315,8 +315,10 @@ main {
     }
     
     #floating-error {
-        margin-top: 5%;
-        width: 83%;
+        width: 82.6%;
+        margin-left: 0.55%;
+        margin-top: 46px;
+        
     }
     
     #destination-field {
