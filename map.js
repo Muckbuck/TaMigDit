@@ -1,5 +1,5 @@
 var map;
-var infowindow;
+var infowindow = null;
 var directionsService;
 var directionsDisplay;
 var currentRouteData = {};
@@ -8,8 +8,6 @@ var currentPos = {
     lat: 56.605099,
     lng: 13.003036
 };
-
-
 
 
 /* Ändra tid- och datumsväljaren till nuvarande tid */
@@ -32,25 +30,16 @@ var currentDay = d.getDate();
 if (currentDay < 10) {
     currentDay = "0" + currentDay;
 }
-var currentYear = (d.getFullYear()+0);
+var currentYear = (d.getFullYear() + 0);
 
 document.getElementById("dateInput").value = 
-    currentYear+"-"+currentMonth+"-"+currentDay;
+        currentYear + "-" + currentMonth + "-" + currentDay;
 
 /******************************************/
 
-/* Resnar originfältet första gången den markeras - inte längre nödvändig*//*
-var defaultOrigin = true;
-document.getElementById("origin-field").addEventListener('focus', function (e) {
-    if (defaultOrigin) {
-        this.value = '';
-        defaultOrigin = false;
-    }
-}, true);
-/**************************************************/
 
 /* Ser till att båda destinationsfält har samma info */
-var firstField = document.getElementById('destination-field'),
+var firstField = document.getElementById('destination-field');
     secondField = document.getElementById('menu-destination-field');
 
 firstField.onkeyup = function () {
@@ -61,7 +50,7 @@ secondField.onkeyup = function () {
 };
 /**************************************************/
 
-window.initMap = function(){
+window.initMap = function() {
     directionsService = new google.maps.DirectionsService;
     directionsDisplay = new google.maps.DirectionsRenderer;
     
@@ -140,11 +129,15 @@ window.initMap = function(){
         console.log("Geolocation not supported");
     }
 
-
+    
     /* Vid manuell input */
     document.getElementById("go-button").addEventListener("click", searchByButton);
     document.getElementById("menu-go-button").addEventListener("click", searchByButton);
-
+    $(document).keypress(function(e) {
+    if(e.which == 13) {
+            searchByButton();
+        }
+    });
 
     /*************************/
 
@@ -162,7 +155,7 @@ window.initMap = function(){
             lat: event.latLng.lat(),
             lng: event.latLng.lng()
         };
-        console.log(destination);
+        //console.log(destination);
         calculateAndDisplayRoute(directionsService, directionsDisplay,
             currentPos, destination,
             departure, arrival);
@@ -172,19 +165,6 @@ window.initMap = function(){
 }
 
 
-
-function createSimpleMarker(place, message) {
-    /* Skapar en markör på position place */
-    var marker = new google.maps.Marker({
-        position: place,
-        map: map,
-        title: message
-    });
-    google.maps.event.addListener(marker, 'click', function () {
-        infowindow.setContent(message);
-        infowindow.open(map, this);
-    });
-}
 
 function setPosition(position) {
     /* Ändrar currentPos till nuvarande geolocation position
@@ -228,29 +208,25 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
             };
 
 
-            //console.log(response.routes[0].legs[0]);
-            document.getElementById('errorspace').innerHTML = "";
+            console.log(response.routes[0]);
+            
             document.getElementById("destination-field").value =
                 response.routes[0].legs[0].end_address;
             document.getElementById("menu-destination-field").value =
                 response.routes[0].legs[0].end_address;
+            
             hideError();
             directionsDisplay.setDirections(response);
             
-            /*Här körs getResData() som finns i resrobtest.js*/
-            //getResData();
             
-            /********* Massa loggad info, inget mer ***************************//*
-            if (response.routes[0].legs[0].arrival_time.text != undefined) {
-                console.log("Departure time: " + response.routes[0].legs[0].departure_time.text);
-                console.log("Arrival time: " + response.routes[0].legs[0].arrival_time.text);
+            if (infowindow) {
+                infowindow.close();
             }
-
+            
             var steps = response.routes[0].legs[0].steps;
             var stegNr = 0;
+            var lineName
             for (i = 0; i < steps.length; i++) {
-
-
                 if (steps[i].travel_mode == "TRANSIT") {
                     var lineName;
                     if (steps[i].transit.line.short_name) {
@@ -260,17 +236,43 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
                         lineName = steps[i].transit.line.name;
                         stegNr++;
                     }
-                    console.log("Steg " + stegNr + ": " +
-                        steps[i].transit.line.vehicle.name +
-                        "[" + lineName + "] " +
-                        steps[i].transit.departure_time.text + " " +
-                        steps[i].transit.departure_stop.name + " > " +
-                        steps[i].transit.arrival_time.text + " " +
-                        steps[i].transit.arrival_stop.name + " - " +
-                        steps[i].duration.text);
+                    
+                    stopCoords = {
+                        lat: steps[i].lat_lngs[0].lat(),
+                        lng: steps[i].lat_lngs[0].lng()
+                    }
+                    //console.log(stopCoords);
+                    //createSimpleMarker(stopCoords, "hej");
+                    
+                    
+                    setBusInfoWindow(stopCoords, steps[i].transit.line.vehicle.name+ " - <b>" +
+                                     lineName+
+                                     "</b><p><b>" + steps[i].transit.departure_time.text+":</b> Avresa från:" +
+                                    steps[i].transit.departure_stop.name + "</p><p><b>" +
+                                    steps[i].transit.arrival_time.text + ":</b> Ankomst: " +
+                                     steps[i].transit.arrival_stop.name+ "</p>"
+                                    );
+                    
                 }
+                    
+        }
+            /*if (steps[i].transit.line.short_name) {
+                lineName = steps[i].transit.line.short_name;
+                stegNr++;
+            } else if (steps[i].transit.line.name) {
+                lineName = steps[i].transit.line.name;
+                stegNr++;
             }
-            /********************************************************************/
+            console.log("Steg " + stegNr + ": " +
+                steps[i].transit.line.vehicle.name +
+                "[" + lineName + "] " +
+                steps[i].transit.departure_time.text + " " +
+                steps[i].transit.departure_stop.name + " > " +
+                steps[i].transit.arrival_time.text + " " +
+                steps[i].transit.arrival_stop.name + " - " +
+                steps[i].duration.text);*/
+            //logGoogleTripData(response);
+
         } else {
             console.log(status);
             if (status == "ZERO_RESULTS") {
@@ -282,6 +284,31 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
         }
     });
 }
+
+function createSimpleMarker(place, message) {
+    /* Skapar en markör på position place */
+    var marker = new google.maps.Marker({
+        position: place,
+        map: map,
+        title: message
+    });
+    google.maps.event.addListener(marker, 'click', function () {
+        infowindow.setContent(message);
+        infowindow.open(map, this);
+    });
+}
+
+function setBusInfoWindow (place, message) {
+    infowindow = new google.maps.InfoWindow();
+
+    infowindow.setOptions({
+        content: message,
+        position: place,
+    });
+    infowindow.open(map); 
+    
+}
+
 
 function getInputTime() {
     /* Hämtar tiden från tidsinputfältet och gör om det till ett date objekt */
@@ -310,16 +337,64 @@ function searchByButton() {
     calculateAndDisplayRoute(directionsService, directionsDisplay,
         currentPos, destination,
         departure, arrival);
+}
+
+
+/* Errormeddelande */
+
+function displayError(message){
+    /* Visar errormeddelandet message */
+    document.getElementById('errortext').innerHTML = message;
+    document.getElementById('errorspace').innerHTML = message;
+    $( "#errorspace" ).addClass( "fancy" );
+    $( "#floating-error" ).fadeIn( "fast", function() {});
 
 }
+function hideError() {
+    /* Döljer aktivt errormeddelande */
+    $( "#floating-error" ).fadeOut( "fast", function() {});
+    document.getElementById('errorspace').innerHTML = "";
+    $( "#errorspace" ).removeClass( "fancy" );
+}
+
 $( "#closeerror" ).click(function() {
   hideError();
 });
 
-function displayError(message){
-    document.getElementById('errortext').innerHTML = message;
-    $( "#floating-error" ).fadeIn( "fast", function() {});
+/*********************/
+
+/* debug log*/
+function logGoogleTripData(response) {
+    /* Loggar data om routedatan i response i konsollen */
+    if (response.routes[0].legs[0].arrival_time.text != undefined) {
+        console.log("Departure time: " + response.routes[0].legs[0].departure_time.text);
+        console.log("Arrival time: " + response.routes[0].legs[0].arrival_time.text);
+    }
+
+    var steps = response.routes[0].legs[0].steps;
+    var stegNr = 0;
+    for (i = 0; i < steps.length; i++) {
+
+
+        if (steps[i].travel_mode == "TRANSIT") {
+            var lineName;
+            if (steps[i].transit.line.short_name) {
+                lineName = steps[i].transit.line.short_name;
+                stegNr++;
+            } else if (steps[i].transit.line.name) {
+                lineName = steps[i].transit.line.name;
+                stegNr++;
+            }
+            console.log("Steg " + stegNr + ": " +
+                steps[i].transit.line.vehicle.name +
+                "[" + lineName + "] " +
+                steps[i].transit.departure_time.text + " " +
+                steps[i].transit.departure_stop.name + " > " +
+                steps[i].transit.arrival_time.text + " " +
+                steps[i].transit.arrival_stop.name + " - " +
+                steps[i].duration.text);
+        }
+    }
 }
-function hideError() {
-    $( "#floating-error" ).fadeOut( "fast", function() {});
-}
+
+/***********/
