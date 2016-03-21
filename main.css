@@ -284,6 +284,7 @@ main {
 @media only screen and (max-width: 767px) {
     #search-field {
         width: 99%;
+        margin: 0.4%;
     }
     
     #floating-error {
@@ -310,6 +311,7 @@ main {
     
     #search-field {
         width: 83%;
+        margin: 0.4%;
     }
     
     #floating-error {
@@ -324,10 +326,6 @@ main {
     
     #go-button {
         font-size: 18.3px;
-    }
-    
-    #search-field {
-        width: 83%;
     }
     
     .glyphicon-align-justify {
