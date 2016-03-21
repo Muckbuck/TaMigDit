@@ -3,7 +3,13 @@ var infowindow = null;
 var directionsService;
 var directionsDisplay;
 var currentRouteData = {};
+var focusedField;
+var markers = [];
 /*Default nuvarande position*/
+var defaultPos = {
+    lat: 56.605099,
+    lng: 13.003036
+}
 var currentPos = {
     lat: 56.605099,
     lng: 13.003036
@@ -71,7 +77,7 @@ window.initMap = function() {
     /*********************/
     
     map = new google.maps.Map(document.getElementById('map'), {
-        center: currentPos,
+        center: defaultPos,
         zoom: 8,
         mapTypeControl: false,
         mapTypeControlOptions: {
@@ -140,28 +146,49 @@ window.initMap = function() {
     });
 
     /*************************/
-
+    $( "#origin-field" ).focus(function() {
+        console.log("targeted");
+        focusedField = "#origin-field";
+    });
+    $( "#destination-field, #menu-destination-field" ).focus(function() {
+        console.log("untargeted");
+        focusedField = "";
+    });
     /* Vid klickning på kartan */
     map.addListener('click', function (event) {
-        if (document.getElementById("departure").checked == true) {
-            var departure = getInputTime();
-            var arrival = new Date(0);
+        if (focusedField == "#origin-field") {
+            //var selectedPos =  {coords};
+            //console.log(selectedPos);
+            var selectedPos = {coords: {
+                latitude: event.latLng.lat(),
+                longitude: event.latLng.lng()
+            }};
+            console.log(selectedPos);
+            setPosition(selectedPos);
+            focusedField = "";
         } else {
-            var arrival = getInputTime();
-            var departure = new Date(0);
+            
+        
+            if (document.getElementById("departure").checked == true) {
+                var departure = getInputTime();
+                var arrival = new Date(0);
+            } else {
+                var arrival = getInputTime();
+                var departure = new Date(0);
+            }
+
+            var destination = {
+                lat: event.latLng.lat(),
+                lng: event.latLng.lng()
+            };
+            //console.log(destination);
+            calculateAndDisplayRoute(directionsService, directionsDisplay,
+                currentPos, destination,
+                departure, arrival);
         }
-
-        var destination = {
-            lat: event.latLng.lat(),
-            lng: event.latLng.lng()
-        };
-        //console.log(destination);
-        calculateAndDisplayRoute(directionsService, directionsDisplay,
-            currentPos, destination,
-            departure, arrival);
-
     });
     /***********************/
+    
 }
 
 
@@ -176,6 +203,8 @@ function setPosition(position) {
 
     map.setCenter(currentPos);
     map.setZoom(15);
+    clearMarkers();
+    
     createSimpleMarker(currentPos, "Din nuvarande position");
 
     var infowindow3 = new google.maps.InfoWindow({
@@ -208,7 +237,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
             };
 
 
-            console.log(response.routes[0]);
+            console.log(response.routes[0].legs[0]);
             
             document.getElementById("destination-field").value =
                 response.routes[0].legs[0].end_address;
@@ -224,54 +253,35 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
             }
             
             var steps = response.routes[0].legs[0].steps;
-            var stegNr = 0;
-            var lineName
+            var lineName;
             for (i = 0; i < steps.length; i++) {
                 if (steps[i].travel_mode == "TRANSIT") {
                     var lineName;
                     if (steps[i].transit.line.short_name) {
                         lineName = steps[i].transit.line.short_name;
-                        stegNr++;
                     } else if (steps[i].transit.line.name) {
                         lineName = steps[i].transit.line.name;
-                        stegNr++;
+
                     }
-                    
                     stopCoords = {
                         lat: steps[i].lat_lngs[0].lat(),
                         lng: steps[i].lat_lngs[0].lng()
                     }
-                    //console.log(stopCoords);
-                    //createSimpleMarker(stopCoords, "hej");
                     
-                    
-                    setBusInfoWindow(stopCoords, steps[i].transit.line.vehicle.name+ " - <b>" +
-                                     lineName+
-                                     "</b><p><b>" + steps[i].transit.departure_time.text+":</b> Avresa från:" +
-                                    steps[i].transit.departure_stop.name + "</p><p><b>" +
-                                    steps[i].transit.arrival_time.text + ":</b> Ankomst: " +
-                                     steps[i].transit.arrival_stop.name+ "</p>"
-                                    );
+                    setBusInfoWindow(stopCoords, "<div id='iw-container'> <div class='iw-header'>"+
+                        steps[i].transit.line.vehicle.name + " <b>" +
+                        lineName + "</b>, Riktning: " + steps[i].transit.headsign +
+                        "<p><b></div>" + steps[i].transit.departure_time.text + ",</b> Avresa från: " +
+                        steps[i].transit.departure_stop.name + "</p><p><b>" +
+                        steps[i].transit.arrival_time.text + ",</b> Ankomst: " +
+                        steps[i].transit.arrival_stop.name + "</p>" + "</div>"
+                    );
                     
                 }
                     
         }
-            /*if (steps[i].transit.line.short_name) {
-                lineName = steps[i].transit.line.short_name;
-                stegNr++;
-            } else if (steps[i].transit.line.name) {
-                lineName = steps[i].transit.line.name;
-                stegNr++;
-            }
-            console.log("Steg " + stegNr + ": " +
-                steps[i].transit.line.vehicle.name +
-                "[" + lineName + "] " +
-                steps[i].transit.departure_time.text + " " +
-                steps[i].transit.departure_stop.name + " > " +
-                steps[i].transit.arrival_time.text + " " +
-                steps[i].transit.arrival_stop.name + " - " +
-                steps[i].duration.text);*/
-            //logGoogleTripData(response);
+
+        //logGoogleTripData(response);
 
         } else {
             console.log(status);
@@ -287,7 +297,8 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay,
 
 function createSimpleMarker(place, message) {
     /* Skapar en markör på position place */
-    var marker = new google.maps.Marker({
+    
+    marker = new google.maps.Marker({
         position: place,
         map: map,
         title: message
@@ -296,9 +307,19 @@ function createSimpleMarker(place, message) {
         infowindow.setContent(message);
         infowindow.open(map, this);
     });
+    markers.push(marker);
+}
+function clearMarkers() {
+    for (var i = 0; i < markers.length; i++ ) {
+        markers[i].setMap(null);
+    }
+    markers.length = 0;
 }
 
+
+
 function setBusInfoWindow (place, message) {
+
     infowindow = new google.maps.InfoWindow();
 
     infowindow.setOptions({
@@ -307,6 +328,18 @@ function setBusInfoWindow (place, message) {
     });
     infowindow.open(map); 
     
+    google.maps.event.addListener(infowindow, 'domready', function() {
+
+       var iwOuter = $('.gm-style-iw');
+       var iwBackground = iwOuter.prev();
+
+       iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+
+       // Remove the white background DIV
+       iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+
+    });
+
 }
 
 
