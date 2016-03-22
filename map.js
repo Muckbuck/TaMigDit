@@ -1,3 +1,4 @@
+/* Globala variabler */
 var map;
 var infowindow = null;
 var infowindowArray = [];
@@ -7,61 +8,34 @@ var currentRouteData = {};
 var originFocused = true;
 var markers = [];
 var geocoder;
-/*Default nuvarande position*/
 var DefaultPos = {
     lat: 56.605099,
     lng: 13.003036
 }
-var currentPos = {
-    lat: 56.605099,
-    lng: 13.003036
-};
+var currentPos = DefaultPos;
+/********************/
 
+(function () {
+    /* Ser till att båda destinationsfält har samma info */
+    var firstField = document.getElementById('destination-field');
+    var secondField = document.getElementById('menu-destination-field');
 
-/* Ändra tid- och datumsväljaren till nuvarande tid */
-var d = new Date();
-var currentHour = d.getHours();
-if (currentHour < 10) {
-    currentHour = "0" + currentHour;
-}
-var currentMinute = d.getMinutes();
-if (currentMinute < 10) {
-    currentMinute = "0" + currentMinute;
-}
-document.getElementById("timeInput").value = currentHour + ":" + currentMinute;
+    firstField.onkeyup = function () {
+        secondField.value = firstField.value;
+    };
+    secondField.onkeyup = function () {
+        firstField.value = secondField.value;
+    };
+})();
 
-var currentMonth = (d.getMonth() + 1);
-if (currentMonth < 10) {
-    currentMonth = "0" + currentMonth;
-}
-var currentDay = d.getDate();
-if (currentDay < 10) {
-    currentDay = "0" + currentDay;
-}
-var currentYear = (d.getFullYear() + 0);
-
-document.getElementById("dateInput").value =
-    currentYear + "-" + currentMonth + "-" + currentDay;
-
-/******************************************/
-
-
-/* Ser till att båda destinationsfält har samma info */
-var firstField = document.getElementById('destination-field');
-secondField = document.getElementById('menu-destination-field');
-
-firstField.onkeyup = function () {
-    secondField.value = firstField.value;
-};
-secondField.onkeyup = function () {
-    firstField.value = secondField.value;
-};
-/**************************************************/
+setTimeAndDate();
 
 window.initMap = function () {
     directionsService = new google.maps.DirectionsService;
     directionsDisplay = new google.maps.DirectionsRenderer;
-
+    geocoder = new google.maps.Geocoder;
+    infowindow = new google.maps.InfoWindow();
+    
     /* Custom map style */
     var customMapType = new google.maps.StyledMapType([
         {
@@ -91,15 +65,14 @@ window.initMap = function () {
 
     map.mapTypes.set(customMapTypeId, customMapType);
     map.setMapTypeId(customMapTypeId);
-
+    
     var transitArea = document.getElementById('transit-schedule');
-    geocoder = new google.maps.Geocoder;
-
     var rendererOptions = {
-        map: map
-        , panel: transitArea
-        , hideRouteList: true
+        map: map,
+        panel: transitArea,
+        hideRouteList: true
     };
+    
     directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
     directionsDisplay.setMap(map);
 
@@ -123,22 +96,19 @@ window.initMap = function () {
     var menuDestinationField = document.getElementById('menu-destination-field');
     autocomplete = new google.maps.places.Autocomplete(menuDestinationField, options);
 
-    /***************/
-
-
-    infowindow = new google.maps.InfoWindow();
+    /********************/
 
     var service = new google.maps.places.PlacesService(map);
 
     /* Sätt nuvarande position till användarens geolocation */
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(setPosition);
+        navigator.geolocation.getCurrentPosition(getAndSetPosition);
     } else {
         console.log("Geolocation not supported");
     }
-
-
-    /* Vid manuell input */
+    /********************************************************/
+    
+    /* Vid manuell input och tryck på antingen någon av sökknapparna, eller enter */
     document.getElementById("go-button").addEventListener("click", searchByButton);
     document.getElementById("menu-go-button").addEventListener("click", searchByButton);
     $(document).keypress(function (e) {
@@ -148,26 +118,24 @@ window.initMap = function () {
     });
 
     /*************************/
+    
+    /* Hanterar ifall användaren tryckt på origin field senast */
     $( "#origin-field" ).focus(function() {
-        console.log("targeted");
         originFocused = true;
     });
     $( "#destination-field, #menu-destination-field" ).focus(function() {
-        console.log("untargeted");
         originFocused = false;
     });
+    
     /* Vid klickning på kartan */
     map.addListener('click', function (event) {
         /* Bästäm origin med klick ifall originrutan markerats */
         if (originFocused) {
-            //var selectedPos =  {coords};
-            //console.log(selectedPos);
             var selectedPos = {coords: {
                 latitude: event.latLng.lat(),
                 longitude: event.latLng.lng()
             }};
-            console.log(selectedPos);
-            setPosition(selectedPos);
+            getAndSetPosition(selectedPos);
         } else {
             /* Annars utför sökning med klickad destination */
         
@@ -183,10 +151,8 @@ window.initMap = function () {
                 lat: event.latLng.lat(),
                 lng: event.latLng.lng()
             };
-            //console.log(destination);
-            calculateAndDisplayRoute(directionsService, directionsDisplay,
-                currentPos, destination,
-                departure, arrival);
+            calculateAndDisplayRoute(currentPos, destination,
+                                    departure, arrival);
         }
     });
 
@@ -196,90 +162,107 @@ window.initMap = function () {
 
 
 
-function setPosition(position) {
-    /* Ändrar currentPos till nuvarande geolocation position
-     * och centrerar kartan på positionen*/
-    currentPos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
+function getAndSetPosition(pos) {
+    /* Letar upp addressen på 
+     * @param {coords:{lat, lng}} pos
+     * och om ifall google reverse geocode hittar ett resultat så
+     * blir pos den nya currentPos, och kartan centreras på platsen
+     * och en markör sätts ut */
+    pos = {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude
     };
     
-    reverseGeo(currentPos);
-    
+    geocoder.geocode({'latLng': pos}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            if (results[1]) {
+                /* Success */
+                var address = results[0].formatted_address;
                 
-    map.setCenter(currentPos);
-    map.setZoom(15);
-    clearMarkers();
-    
-    createSimpleMarker(currentPos, "Din nuvarande position");
+                currentPos = {
+                    lat: pos.lat,
+                    lng: pos.lng
+                };
 
-    var infowindow3 = new google.maps.InfoWindow({
-        content: "Din position"
+                document.getElementById("origin-field").value = address;
+
+                map.setCenter(currentPos);
+                map.setZoom(15);
+
+                clearMarkers();
+                createSimpleMarker(currentPos, "Din nuvarande position");
+
+                var infowindow3 = new google.maps.InfoWindow({
+                    content: "Din position"
+                });
+                originFocused = false;
+                /*********/
+            } else {
+                displayError("No results found");
+                return false;
+            }
+        } else {
+            displayError("Geocoder failed due to: " + status);
+            return false;
+        }
     });
-    originFocused = false;
 }
+    
 
-function calculateAndDisplayRoute(directionsService, directionsDisplay
-    , origin, destination, departure, arrival) {
-    /* Tar emot två positioner, origin och destination och räknar ut bästa
+function calculateAndDisplayRoute(origin, destination, departure, arrival) {
+    /* Tar emot två positioner
+     * @param {lat, lng} origin
+     * @param {lat, lng} destination 
+     * och räknar ut bästa
      * resväg med kollektivtrafik och visar upp resvägen på karta.
-     * Kan även ta emot departure och arrival tid och inkludera det i sökningen.*/
-    //console.log(departure);
+     * Tar även emot 
+     * @param {date} departure
+     * @param {date} arrival
+     * och inkluderar det som parametrar i sökningen.
+     * Den av arrival och departure som ska vara oanvänd skickas som ett date(0) objekt*/
     directionsService.route({
         origin: origin
         , destination: destination
         , travelMode: google.maps.TravelMode.TRANSIT
         , transitOptions: {
-            departureTime: departure
-            , arrivalTime: arrival
+            departureTime: departure,
+            arrivalTime: arrival
         }
     }, function (response, status) {
         if (status === google.maps.DirectionsStatus.OK) {
             /* Vid lyckad sökning: */
             currentRouteData = {
-                departure: departure
-                , arrival: arrival
-                , currentPos: currentPos
-                , destination: destination
+                departure: departure,
+                arrival: arrival,
+                currentPos: currentPos,
+                destination: destination
             };
-
-
-            console.log(response.routes[0].legs[0]);
             
             document.getElementById("destination-field").value =
                 response.routes[0].legs[0].end_address;
             document.getElementById("menu-destination-field").value =
                 response.routes[0].legs[0].end_address;
             document.getElementById('errorspace').innerHTML = "";
-
             hideError();
+            
             directionsDisplay.setDirections(response);
             clearInfowindows();
-            /*
-            if (infowindow) {
-                infowindow.close();
-            }
-            */
+
             var steps = response.routes[0].legs[0].steps;
             var lineName;
             for (i = 0; i < steps.length; i++) {
+                /* Vi vill endast visa data om kollektivtrafik, inte gångavstånd */
                 if (steps[i].travel_mode == "TRANSIT") {
-                    var lineName;
                     if (steps[i].transit.line.short_name) {
                         lineName = steps[i].transit.line.short_name;
                     } else if (steps[i].transit.line.name) {
                         lineName = steps[i].transit.line.name;
-
                     }
 
                     stopCoords = {
                         lat: steps[i].lat_lngs[0].lat(),
                         lng: steps[i].lat_lngs[0].lng()
                     }
-                        //console.log(stopCoords);
-                        //createSimpleMarker(stopCoords, "hej");
-
-
                     setBusInfoWindow(stopCoords, "<div id='iw-container'> <div class='iw-header'>" +
                                     steps[i].transit.line.vehicle.name + " <b>" +
                                     lineName + "</b>, Riktning: " + steps[i].transit.headsign +
@@ -292,14 +275,12 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay
                 }
                     
         }
-
         //logGoogleTripData(response);
 
-
         } else {
+            /* Vid misslyckad sökning */
             console.log(status);
             if (status == "ZERO_RESULTS") {
-                //document.getElementById('errorspace').innerHTML = "Kunde inte hitta någon väg till vald destination";
                 displayError("Kunde inte hitta någon väg till vald destination");
             } else {
                 displayError('Directions request failed due to ' + status);
@@ -309,8 +290,10 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay
 }
 
 function createSimpleMarker(place, message) {
-    /* Skapar en markör på position place */
-    
+    /* Skapar en markör på 
+     * @param {lat, lng} place
+     * med meddelandet
+     * @param {string} message */
     marker = new google.maps.Marker({
         position: place,
         map: map,
@@ -323,13 +306,16 @@ function createSimpleMarker(place, message) {
     });
     markers.push(marker);
 }
+
 function clearMarkers() {
+    /* Tar bort alla markörer på kartan */
     for (var i = 0; i < markers.length; i++ ) {
         markers[i].setMap(null);
     }
     markers.length = 0;
 }
 function clearInfowindows() {
+    /* Tar bort alla infowindows på kartan */
     for (var i = 0; i < infowindowArray.length; i++ ) {
         infowindowArray[i].close();
     }
@@ -351,9 +337,9 @@ function setBusInfoWindow (place, message) {
     infowindow.open(map);
     infowindowArray.push(infowindow);
     
+    /* Stil för infowindows */
     var iwOuter = $('.gm-style-iw');
     
-    /* Stil för infowindows */
     var iwBackground = iwOuter.prev();
 
     // Remove the background shadow DIV
@@ -394,7 +380,7 @@ function setBusInfoWindow (place, message) {
 
 
 function getInputTime() {
-    /* Hämtar tiden från tidsinputfältet och gör om det till ett date objekt */
+    /* Returnar tiden från tidsinputfältet och gör om det till ett date objekt */
     return new Date(document.getElementById("dateInput").value.substring(0, 4)
         , document.getElementById("dateInput").value.substring(5, 7)
         , document.getElementById("dateInput").value.substring(8, 10)
@@ -418,16 +404,45 @@ function searchByButton() {
         document.getElementById("origin-field").value != "Nuvarande position") {
         currentPos = document.getElementById("origin-field").value;
     }
-    calculateAndDisplayRoute(directionsService, directionsDisplay
-        , currentPos, destination
-        , departure, arrival);
+    calculateAndDisplayRoute(currentPos, destination,
+                            departure, arrival);
+}
+
+function setTimeAndDate() {
+    /* Ändra tid- och datumsväljaren till nuvarande tid */
+    /* Tid */
+    var d = new Date();
+    var currentHour = d.getHours();
+    if (currentHour < 10) {
+        currentHour = "0" + currentHour;
+    }
+    var currentMinute = d.getMinutes();
+    if (currentMinute < 10) {
+        currentMinute = "0" + currentMinute;
+    }
+    document.getElementById("timeInput").value = currentHour + ":" + currentMinute;
+
+    /* Datum */
+    var currentMonth = (d.getMonth() + 1);
+    if (currentMonth < 10) {
+        currentMonth = "0" + currentMonth;
+    }
+    var currentDay = d.getDate();
+    if (currentDay < 10) {
+        currentDay = "0" + currentDay;
+    }
+    var currentYear = (d.getFullYear() + 0);
+
+    document.getElementById("dateInput").value =
+        currentYear + "-" + currentMonth + "-" + currentDay;
 }
 
 
 /* Errormeddelande */
 
 function displayError(message) {
-    /* Visar errormeddelandet message */
+    /* Visar errormeddelandet 
+     * @param {string} message */
     document.getElementById('errortext').innerHTML = message;
     document.getElementById('errorspace').innerHTML = message;
     $("#errorspace").addClass("alert alert-warning");
@@ -447,9 +462,11 @@ $("#closeerror").click(function () {
 });
 /*********************/
 
-/* debug log*/
+/* debug log */
 function logGoogleTripData(response) {
-    /* Loggar data om routen i 'response' i konsollen */
+    /* Loggar data om routen i 
+     * @param {json} response
+     * i konsollen */
     if (response.routes[0].legs[0].arrival_time.text != undefined) {
         console.log("Departure time: " + response.routes[0].legs[0].departure_time.text);
         console.log("Arrival time: " + response.routes[0].legs[0].arrival_time.text);
@@ -486,21 +503,4 @@ function logGoogleTripData(response) {
 /***********/
 
 
-function reverseGeo(pos) {
-    //console.log(pos.lat);
-    //console.log(pos.lng);
-    
-    geocoder.geocode({'latLng': pos}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        if (results[1]) {
-          document.getElementById("origin-field").value = results[0].formatted_address;
-          /* Tänkte returna här men behövs callbacks pga async */
-        } else {
-          displayError("No results found");
-        }
-      } else {
-        displayError("Geocoder failed due to: " + status);
-      }
-    });
-}
-           
+       
