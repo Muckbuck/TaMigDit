@@ -4,11 +4,10 @@
 <head>
     <title>TaMigDit</title>
     <meta charset="utf-8">
-    <meta http-equiv="cleartype" content="on">
     <meta name="MobileOptimized" content="320">
     <meta name="HandheldFriendly" content="True">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="viewport" content="width=device-width, initial-scale=1.2, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" type="text/css" href="main.css">
     <link rel="stylesheet" href="node_modules/sidr/dist/stylesheets/jquery.sidr.light.min.css">
@@ -24,16 +23,16 @@
             <div class="input-group">
                 <div class="input-group-btn">
                     <a href="#sidr" id="simple-menu-button" class="btn btn-default" role="button"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a> </div>
-                <input type="text" name="destination" class="form-control" aria-label="Till" id="destination-field">
+                <input type="text" name="destination" class="form-control" aria-label="Till" id="destination-field" placeholder="Välj destination eller klicka på kartan">
                 <div class="input-group-btn">
-                    <button type="button" class="btn btn-default" id="go-button">Sök</button>
+                    <button type="button" class="btn btn-default" id="go-button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                 </div>
             </div>
         </div>
 
         <div id="sidr">
 
-            <input type="text" name="origin" class="form-control" id="origin-field" aria-label="Nuvarande position" placeholder="Nuvarande position">
+            <input type="text" name="origin" class="form-control" id="origin-field" aria-label="Nuvarande position" placeholder="Välj startpunkt eller klicka på kartan">
             <input type="text" name="destination" class="form-control" id="menu-destination-field" aria-label="Till" placeholder="Till">
 
             <form>
@@ -50,22 +49,24 @@
             <input id="dateInput" type="date">
 
             <button type="button" class="btn btn-default" id="menu-go-button">Sök</button>
-            <div id="errorspace"></div>
-            <div id="transit-schedule">
-            
+
+            <div id="errorspace" role="alert">
             </div>
+
+            <div id="transit-schedule"></div>
+
         </div>
 
         <div id="map"></div>
 
-        <!--
-    <footer class="panel-footer"></footer>
-    -->
+        <div id="floating-error" class="alert alert-warning">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <span id="errortext"></span>
+        </div>
 
     </main>
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNePwQxex-MkHNGg6MIVDDwJDEM-zvsmk
-        &libraries=places&callback=initMap"></script>
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/jquery/2.2.0/jquery.min.js"></script>
@@ -74,6 +75,9 @@
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <script src="menu.js"></script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNePwQxex-MkHNGg6MIVDDwJDEM-zvsmk
+        &libraries=places&callback=initMap&language=sv"></script>
     <script src="map.js"></script>
     <script src="resrobtest.js"></script>
 

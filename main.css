@@ -3,55 +3,145 @@
    License: none (public domain)
 */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
 }
 
-html,body {
+
+/* HTML5 display-role reset for older browsers */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+html,
+body {
     width: 100%;
     height: 100%;
 }
- 
+
 main {
     height: 100%;
 }
@@ -60,33 +150,40 @@ main {
     height: 100%;
     width: 100%;
     position: fixed!important;
-    left:0;
-    }
+    left: 0;
+}
+
+
 /*
 */
+
+
 /*Slider
 */
+
 #sidr {
-    background:#1693BD;
+    background: #1693BD;
     box-shadow: 0 0 5px 5px #2892B1 inset;
 }
 
-#menu-destination-field,#origin-field {
+#menu-destination-field,
+#origin-field {
     width: 95%;
     margin-top: 2%;
     margin-left: auto;
     margin-right: auto;
-    background-color: white;  
+    background-color: white;
 }
 
 #menu-go-button {
-    width: 95%;
-    margin-left: 2.3%;
+    width: 80%;
+    margin-left: 9.3%;
 }
 
 #mobile-header {
     display: none;
 }
+
 .xdsoft_datetimepicker {
     padding: 0!important;
 }
@@ -95,6 +192,7 @@ main {
     width: 196px!important;
     margin-left: 1px!important;
 }
+
 .xdsoft_datetimepicker .xdsoft_timepicker {
     width: 60px!important;
     float: left!important;
@@ -105,17 +203,21 @@ main {
 .xdsoft_datetimepicker .xdsoft_datepicker.active+.xdsoft_timepicker {
     margin-top: 9px!important;
 }
-.xdsoft_datetimepicker .xdsoft_month{
+
+.xdsoft_datetimepicker .xdsoft_month {
     width: 70px!important;
     text-align: left!important;
 }
+
 .xdsoft_today_button {
     display: none!important;
 }
+
 .xdsoft_datetimepicker .xdsoft_year {
     width: 48px!important;
 }
-#timeInput{
+
+#timeInput {
     text-align: center;
     margin-top: 8px;
     margin-bottom: 3px;
@@ -124,22 +226,158 @@ main {
     margin-right: auto;
     background: white;
 }
-#dateInput{
+
+#dateInput {
     text-align: center;
     margin-top: 3px;
     width: 95%;
     margin-left: auto;
     margin-right: auto;
-    background: white;   
+    background: white;
 }
+
 #search-field {
     position: absolute;
     z-index: 1;
-    margin:0.4%;
+    margin: 0.2%;
     box-sizing: border-box;
+    width: 40%
 }
 
-@media only screen and (max-width: 767px){
+#destination-field {
+    height: 39px;
+    font-size: 1.2em;
+}
+
+#go-button {
+    font-size: 18px;
+}
+
+.glyphicon-align-justify {
+    font-size: 20.3px;
+}
+
+#errorspace {
+    margin-top: 10px;
+    font-size: 11.5px;
+    padding-left: 3px;
+    padding-right: 1px;
+}
+
+#floating-error {
+    margin-top: 45px;
+    width: 39.85%;
+    position: absolute;
+    z-index: 1000;
+    margin-left: 0.3%;
+    display: none;
+}
+
+#floating-error a {
+    color: #337ab7;
+    text-decoration: none;
+    float: right;
+}
+
+.adp {
+    color: #FCFEFF;
+}
+
+.adp-warnbox {
+    display: none;
+}
+
+.adp-placemark {
+    background: #FDFDFD!important;
+    border: 1px solid #A79FA2!important;
+}
+
+.adp-summary {
+    background-color: #D6D8D5;
+}
+
+.adp-directions {
+    background-color: #FFFFFF;
+}
+
+.adp-agencies {
+    display: none;
+}
+
+.adp-details,
+.adp-legal {
+    display: none;
+}
+
+.gm-style-iw {
+    width: 350px !important;
+    top: 19px !important;
+    left: 100px !important;
+    opacity: 0.8;
+}
+
+#iw-container {
+    background-color: #fff;
+    padding: 1px;
+    box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
+    border: 1px solid rgba(72, 181, 233, 0.6);
+    border-radius: 2px 2px 10px 10px;
+}
+
+#iw-container .iw-header {
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 1px;
+    background-color: #48b5e9;
+    color: white;
+    margin: 0px;
+    border-radius: 1px 1px 0 0;
+    /* In accordance with the rounding of the default infowindow corners. */
+}
+
+@media only screen and (max-width: 767px) {
+    #search-field {
+        width: 99.25%;
+        margin: 0.55%;
+    }
+    #floating-error {
+        margin-top: 48px;
+        width: 98.85%;
+        margin-left: 0.5%;
+    }
+    #destination-field {
+        height: 39px;
+        font-size: 1.1em;
+    }
+    #go-button {
+        font-size: 18px;
+    }
+    .glyphicon-align-justify {
+        font-size: 20.3px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
     #mobile-header {
         display: block;
     }
+    #search-field {
+        width: 83%;
+    }
+    #floating-error {
+        width: 82.6%;
+        margin-left: 0.28%;
+        margin-top: 46px;
+    }
+    #destination-field {
+        height: 40px;
+        font-size: 1.2em;
+    }
+    #go-button {
+        font-size: 18.3px;
+    }
+    .glyphicon-align-justify {
+        font-size: 21.3px;
+    }
+}
