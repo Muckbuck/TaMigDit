@@ -282,51 +282,58 @@ main {
 .adp {
     color: #FCFEFF;
 }
+
 .adp-warnbox {
     display: none;
 }
+
 .adp-placemark {
     background: #FDFDFD!important;
-    border: 1px solid #A79FA2!important!;
+    border: 1px solid #A79FA2!important;
 }
+
 .adp-summary {
     background-color: #D6D8D5;
 }
+
 .adp-directions {
-    background-color:#FFFFFF;
+    background-color: #FFFFFF;
 }
+
 .adp-agencies {
     display: none;
 }
-.adp-details, .adp-legal {
+
+.adp-details,
+.adp-legal {
     display: none;
 }
 
 .gm-style-iw {
-   width: 350px !important;
-   top: 19px !important;
-   left: 100px !important;
-   opacity: 0.8;
+    width: 350px !important;
+    top: 19px !important;
+    left: 100px !important;
+    opacity: 0.8;
 }
 
 #iw-container {
     background-color: #fff;
     padding: 1px;
-   box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
-   border: 1px solid rgba(72, 181, 233, 0.6);
-   border-radius: 2px 2px 10px 10px; // apply 10px to the bottom corners of the infowindow
-    
+    box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
+    border: 1px solid rgba(72, 181, 233, 0.6);
+    border-radius: 2px 2px 10px 10px;
 }
 
-#iw-container  .iw-header {
-   font-family: 'Open Sans Condensed', sans-serif;
-   font-size: 13px;
-   font-weight: 400;
-   padding: 1px;
-   background-color: #48b5e9;
-   color: white;
-   margin: 0px;
-   border-radius: 1px 1px 0 0; /* In accordance with the rounding of the default infowindow corners. */
+#iw-container .iw-header {
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 1px;
+    background-color: #48b5e9;
+    color: white;
+    margin: 0px;
+    border-radius: 1px 1px 0 0;
+    /* In accordance with the rounding of the default infowindow corners. */
 }
 
 @media only screen and (max-width: 767px) {
@@ -334,54 +341,43 @@ main {
         width: 99.25%;
         margin: 0.55%;
     }
-    
     #floating-error {
         margin-top: 48px;
         width: 98.85%;
         margin-left: 0.5%;
     }
-    
     #destination-field {
         height: 39px;
         font-size: 1.1em;
     }
-    
     #go-button {
         font-size: 18px;
     }
-    
     .glyphicon-align-justify {
         font-size: 20.3px;
     }
 }
+
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
     #mobile-header {
         display: block;
     }
-    
     #search-field {
         width: 83%;
     }
-    
     #floating-error {
         width: 82.6%;
         margin-left: 0.28%;
         margin-top: 46px;
-        
     }
-    
     #destination-field {
         height: 40px;
         font-size: 1.2em;
     }
-    
     #go-button {
         font-size: 18.3px;
     }
-    
     .glyphicon-align-justify {
         font-size: 21.3px;
     }
-}
-
 }
