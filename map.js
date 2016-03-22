@@ -12,8 +12,8 @@ var DefaultPos = {
     lng: 13.003036
 }
 var currentPos = {
-    lat: 56.605099
-    , lng: 13.003036
+    lat: 56.605099,
+    lng: 13.003036
 };
 
 
@@ -249,7 +249,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay
                 response.routes[0].legs[0].end_address;
             document.getElementById("menu-destination-field").value =
                 response.routes[0].legs[0].end_address;
-
+            document.getElementById('errorspace').innerHTML = "";
 
             hideError();
             directionsDisplay.setDirections(response);
@@ -332,16 +332,21 @@ function clearMarkers() {
 
 
 function setBusInfoWindow (place, message) {
+    /* Placerar en inforuta för resvägs-steg på positionen 
+     * @param {lat, lng} place 
+     * med meddelandet 
+     * @param {string} message */
     infowindow = new google.maps.InfoWindow();
 
     infowindow.setOptions({
-        content: message
-        , position: place
-    , });
+        content: message,
+        position: place
+    });
     infowindow.open(map);
 
     var iwOuter = $('.gm-style-iw');
-
+    
+    /* Stil för infowindows */
     var iwBackground = iwOuter.prev();
 
     // Remove the background shadow DIV
@@ -361,12 +366,13 @@ function setBusInfoWindow (place, message) {
         iwBackground.children(':nth-child(2)').css({'display' : 'none'});
         iwBackground.children(':nth-child(4)').css({'display' : 'none'});
     });
-
+    
+    /* Stil för stängningkryss på iw */
     var iwCloseBtn = iwOuter.next();
 
     iwCloseBtn.css({
       opacity: '1', 
-      right: '48px', top: '7px', 
+      right: '-51.5px', top: '12.5px',
       'box-shadow': '0 0 0 2pt #48b5e9', 
       'border-radius': '5px', 
       });
@@ -375,8 +381,8 @@ function setBusInfoWindow (place, message) {
     iwCloseBtn.mouseout(function(){
       $(this).css({opacity: '1'});
     });
-
-
+    iwBackground.children(':nth-child(3)').find('div').children().css(
+        {'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1', opacity:0.8});
 }
 
 
@@ -393,6 +399,7 @@ function getInputTime() {
 function searchByButton() {
     /* Hämtar inputdata från html element utför en sökning med datan */
     var destination = document.getElementById("destination-field").value;
+    
     if (document.getElementById("departure").checked == true) {
         var departure = getInputTime();
         var arrival = new Date(0);
