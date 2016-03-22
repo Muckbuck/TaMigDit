@@ -1,5 +1,6 @@
 var map;
 var infowindow = null;
+var infowindowArray = [];
 var directionsService;
 var directionsDisplay;
 var currentRouteData = {};
@@ -253,12 +254,12 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay
 
             hideError();
             directionsDisplay.setDirections(response);
-
-
+            clearInfowindows();
+            /*
             if (infowindow) {
                 infowindow.close();
             }
-
+            */
             var steps = response.routes[0].legs[0].steps;
             var lineName;
             for (i = 0; i < steps.length; i++) {
@@ -328,7 +329,12 @@ function clearMarkers() {
     }
     markers.length = 0;
 }
-
+function clearInfowindows() {
+    for (var i = 0; i < infowindowArray.length; i++ ) {
+        infowindowArray[i].close();
+    }
+    infowindowArray.length = 0;
+}
 
 
 function setBusInfoWindow (place, message) {
@@ -343,7 +349,8 @@ function setBusInfoWindow (place, message) {
         position: place
     });
     infowindow.open(map);
-
+    infowindowArray.push(infowindow);
+    
     var iwOuter = $('.gm-style-iw');
     
     /* Stil för infowindows */
@@ -480,8 +487,8 @@ function logGoogleTripData(response) {
 
 
 function reverseGeo(pos) {
-    console.log(pos.lat);
-    console.log(pos.lng);
+    //console.log(pos.lat);
+    //console.log(pos.lng);
     
     geocoder.geocode({'latLng': pos}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
